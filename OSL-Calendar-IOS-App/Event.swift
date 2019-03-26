@@ -15,10 +15,11 @@ class Event {
     var date = ""
     var organization = ""
     var type = ""
-    var tags: [String] = []
-    var imgid = 0
+    var tags = ""
+    var imgid = ""
+    var description = ""
     
-    init(name: String, location: String, date: String, organization: String, type: String, tags: [String], imgid: Int) {
+    init(name: String, location: String, date: String, organization: String, type: String, tags: String, imgid: String, description: String) {
         self.name = name
         self.location = location
         self.date = date
@@ -26,6 +27,7 @@ class Event {
         self.type = type
         self.tags = tags
         self.imgid = imgid
+        self.description = description
     }
     
     func getName() -> String {
@@ -48,12 +50,16 @@ class Event {
         return self.type
     }
     
-    func getTags() -> [String] {
+    func getTags() -> String {
         return self.tags
     }
     
-    func getImgid() -> Int {
+    func getImgid() -> String {
         return self.imgid
+    }
+    
+    func getDescription() -> String {
+        return self.description
     }
     
     func setName(name: String) {
@@ -76,12 +82,16 @@ class Event {
         self.type = type
     }
     
-    func setTags(tags: [String]) {
+    func setTags(tags: String) {
         self.tags = tags
     }
     
-    func setImgid(imgid: Int) {
+    func setImgid(imgid: String) {
         self.imgid = imgid
+    }
+    
+    func setDescription(description: String) {
+        self.description = description
     }
     
 }

@@ -10,6 +10,7 @@ target 'OSL-Calendar-IOS-App' do
   pod 'SimpleCheckbox'
   pod 'Toast-Swift'
   pod 'Firebase/Core'
+  pod 'Firebase/Database'
 
   target 'OSL-Calendar-IOS-AppTests' do
     inherit! :search_paths

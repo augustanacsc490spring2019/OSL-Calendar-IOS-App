@@ -8,15 +8,20 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class SearchViewController: UITableViewController {
     
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
+    var database: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
+        getTheme()
+        database = Database.database().reference().child("current-events")
+        databaseListener()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -50,6 +55,14 @@ class SearchViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("View Will Appear: Search")
+    }
+    
+    func databaseListener() {
+        database.observe(DataEventType.value, with: { (snapshot) in
+            for snap in snapshot.children {
+                
+            }
+        })
     }
     
     func getTheme() {

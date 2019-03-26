@@ -20,6 +20,7 @@
 		76692350224A801E00145FBE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234F224A801E00145FBE /* SettingsViewController.swift */; };
 		76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478F9224A827500B66CD2 /* ThemeManager.swift */; };
 		76B478FC224A828000B66CD2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478FB224A828000B66CD2 /* Event.swift */; };
+		76E7ADE3224ABE8800A96375 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */; };
 		7EFAA0E85F8D30F5133981E2 /* Pods_OSL_Calendar_IOS_AppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		7669234F224A801E00145FBE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76B478F9224A827500B66CD2 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		76B478FB224A828000B66CD2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-App.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App.release.xcconfig"; sourceTree = "<group>"; };
 		A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_AppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 				761D1BD5224A7C5900D79E34 /* Assets.xcassets */,
 				761D1BD7224A7C5900D79E34 /* LaunchScreen.storyboard */,
 				761D1BDA224A7C5900D79E34 /* Info.plist */,
+				76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */,
 			);
 			path = "OSL-Calendar-IOS-App";
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				761D1BD9224A7C5900D79E34 /* LaunchScreen.storyboard in Resources */,
+				76E7ADE3224ABE8800A96375 /* GoogleService-Info.plist in Resources */,
 				761D1BD6224A7C5900D79E34 /* Assets.xcassets in Resources */,
 				761D1BD4224A7C5400D79E34 /* Main.storyboard in Resources */,
 			);
@@ -320,6 +324,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/SimpleCheckbox/SimpleCheckbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -329,6 +334,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SimpleCheckbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -22,7 +22,7 @@ class Theme {
     var theme: ThemeName = ThemeName.white
     var backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     var darkerBackground = UIColor.init(red: 211/255, green: 211/255, blue: 211/255, alpha: 1)
-    var textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0/255)
+    var textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
     var isDark = false
     var checkboxColor = UIColor.blue
     var checkboxBackground = UIColor.white
