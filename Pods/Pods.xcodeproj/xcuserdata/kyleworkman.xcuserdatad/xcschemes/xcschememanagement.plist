@@ -81,19 +81,26 @@
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
-		<key>SimpleCheckbox.xcscheme</key>
+		<key>QRCodeReader.swift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
-		<key>Toast-Swift.xcscheme</key>
+		<key>SimpleCheckbox.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>14</integer>
+		</dict>
+		<key>Toast-Swift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>15</integer>
 		</dict>
 		<key>leveldb-library.xcscheme</key>
 		<dict>
