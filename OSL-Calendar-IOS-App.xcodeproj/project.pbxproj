@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B152F5397BC43C608203D52 /* Pods_OSL_Calendar_IOS_AppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F206EF54819E155FA85BC9BB /* Pods_OSL_Calendar_IOS_AppTests.framework */; };
+		6B8BE5D44C3A4651086F4218 /* Pods_OSL_Calendar_IOS_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */; };
 		761D1BCD224A7C5400D79E34 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761D1BCC224A7C5400D79E34 /* AppDelegate.swift */; };
 		761D1BD4224A7C5400D79E34 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 761D1BD2224A7C5400D79E34 /* Main.storyboard */; };
 		761D1BD6224A7C5900D79E34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 761D1BD5224A7C5900D79E34 /* Assets.xcassets */; };
@@ -16,6 +18,9 @@
 		7669234C224A800500145FBE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234B224A800500145FBE /* SearchViewController.swift */; };
 		7669234E224A801300145FBE /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234D224A801300145FBE /* QRViewController.swift */; };
 		76692350224A801E00145FBE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234F224A801E00145FBE /* SettingsViewController.swift */; };
+		76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478F9224A827500B66CD2 /* ThemeManager.swift */; };
+		76B478FC224A828000B66CD2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478FB224A828000B66CD2 /* Event.swift */; };
+		7EFAA0E85F8D30F5133981E2 /* Pods_OSL_Calendar_IOS_AppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		371715C91AAF6C12BD300396 /* Pods-OSL-Calendar-IOS-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-App.debug.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App.debug.xcconfig"; sourceTree = "<group>"; };
+		6936AD6050333C664429DC7B /* Pods-OSL-Calendar-IOS-AppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppUITests.debug.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppUITests/Pods-OSL-Calendar-IOS-AppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		761D1BC9224A7C5400D79E34 /* OSL-Calendar-IOS-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OSL-Calendar-IOS-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761D1BCC224A7C5400D79E34 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		761D1BD3224A7C5400D79E34 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -51,6 +58,15 @@
 		7669234B224A800500145FBE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7669234D224A801300145FBE /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		7669234F224A801E00145FBE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		76B478F9224A827500B66CD2 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		76B478FB224A828000B66CD2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-App.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App.release.xcconfig"; sourceTree = "<group>"; };
+		A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_AppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AC42DB222CC65A407AAE3F /* Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppTests/Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DFDC30111B30E85F56C658C7 /* Pods-OSL-Calendar-IOS-AppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppTests.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppTests/Pods-OSL-Calendar-IOS-AppTests.release.xcconfig"; sourceTree = "<group>"; };
+		F206EF54819E155FA85BC9BB /* Pods_OSL_Calendar_IOS_AppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_AppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F53040670D2B687B19E6956D /* Pods-OSL-Calendar-IOS-AppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppUITests.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppUITests/Pods-OSL-Calendar-IOS-AppUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B8BE5D44C3A4651086F4218 /* Pods_OSL_Calendar_IOS_App.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B152F5397BC43C608203D52 /* Pods_OSL_Calendar_IOS_AppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +90,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EFAA0E85F8D30F5133981E2 /* Pods_OSL_Calendar_IOS_AppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2890863BB4D7744FF78CF52F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */,
+				F206EF54819E155FA85BC9BB /* Pods_OSL_Calendar_IOS_AppTests.framework */,
+				B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		35986028FE664E2C68048476 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				371715C91AAF6C12BD300396 /* Pods-OSL-Calendar-IOS-App.debug.xcconfig */,
+				90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */,
+				D2AC42DB222CC65A407AAE3F /* Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig */,
+				DFDC30111B30E85F56C658C7 /* Pods-OSL-Calendar-IOS-AppTests.release.xcconfig */,
+				6936AD6050333C664429DC7B /* Pods-OSL-Calendar-IOS-AppUITests.debug.xcconfig */,
+				F53040670D2B687B19E6956D /* Pods-OSL-Calendar-IOS-AppUITests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		761D1BC0224A7C5400D79E34 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +127,8 @@
 				761D1BE2224A7C5900D79E34 /* OSL-Calendar-IOS-AppTests */,
 				761D1BED224A7C5900D79E34 /* OSL-Calendar-IOS-AppUITests */,
 				761D1BCA224A7C5400D79E34 /* Products */,
+				35986028FE664E2C68048476 /* Pods */,
+				2890863BB4D7744FF78CF52F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +149,8 @@
 				7669234B224A800500145FBE /* SearchViewController.swift */,
 				7669234D224A801300145FBE /* QRViewController.swift */,
 				7669234F224A801E00145FBE /* SettingsViewController.swift */,
+				76B478F9224A827500B66CD2 /* ThemeManager.swift */,
+				76B478FB224A828000B66CD2 /* Event.swift */,
 				761D1BD2224A7C5400D79E34 /* Main.storyboard */,
 				761D1BD5224A7C5900D79E34 /* Assets.xcassets */,
 				761D1BD7224A7C5900D79E34 /* LaunchScreen.storyboard */,
@@ -138,9 +184,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 761D1BF3224A7C5900D79E34 /* Build configuration list for PBXNativeTarget "OSL-Calendar-IOS-App" */;
 			buildPhases = (
+				F6CE2245D1820BD13C7EE174 /* [CP] Check Pods Manifest.lock */,
 				761D1BC5224A7C5400D79E34 /* Sources */,
 				761D1BC6224A7C5400D79E34 /* Frameworks */,
 				761D1BC7224A7C5400D79E34 /* Resources */,
+				0CC839C35122BE34257E6AF4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -155,6 +203,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 761D1BF6224A7C5900D79E34 /* Build configuration list for PBXNativeTarget "OSL-Calendar-IOS-AppTests" */;
 			buildPhases = (
+				C08AF8A0328D09E316125056 /* [CP] Check Pods Manifest.lock */,
 				761D1BDB224A7C5900D79E34 /* Sources */,
 				761D1BDC224A7C5900D79E34 /* Frameworks */,
 				761D1BDD224A7C5900D79E34 /* Resources */,
@@ -173,6 +222,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 761D1BF9224A7C5900D79E34 /* Build configuration list for PBXNativeTarget "OSL-Calendar-IOS-AppUITests" */;
 			buildPhases = (
+				92103CC57EBFBD56B8507E15 /* [CP] Check Pods Manifest.lock */,
 				761D1BE6224A7C5900D79E34 /* Sources */,
 				761D1BE7224A7C5900D79E34 /* Frameworks */,
 				761D1BE8224A7C5900D79E34 /* Resources */,
@@ -257,6 +307,103 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0CC839C35122BE34257E6AF4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/SimpleCheckbox/SimpleCheckbox.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SimpleCheckbox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		92103CC57EBFBD56B8507E15 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OSL-Calendar-IOS-AppUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C08AF8A0328D09E316125056 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OSL-Calendar-IOS-AppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6CE2245D1820BD13C7EE174 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OSL-Calendar-IOS-App-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		761D1BC5224A7C5400D79E34 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -264,7 +411,9 @@
 			files = (
 				7669234C224A800500145FBE /* SearchViewController.swift in Sources */,
 				761D1BCD224A7C5400D79E34 /* AppDelegate.swift in Sources */,
+				76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */,
 				7669234E224A801300145FBE /* QRViewController.swift in Sources */,
+				76B478FC224A828000B66CD2 /* Event.swift in Sources */,
 				76692350224A801E00145FBE /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,6 +587,7 @@
 		};
 		761D1BF4224A7C5900D79E34 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 371715C91AAF6C12BD300396 /* Pods-OSL-Calendar-IOS-App.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -456,6 +606,7 @@
 		};
 		761D1BF5224A7C5900D79E34 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -474,6 +625,7 @@
 		};
 		761D1BF7224A7C5900D79E34 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2AC42DB222CC65A407AAE3F /* Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -495,6 +647,7 @@
 		};
 		761D1BF8224A7C5900D79E34 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DFDC30111B30E85F56C658C7 /* Pods-OSL-Calendar-IOS-AppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -516,6 +669,7 @@
 		};
 		761D1BFA224A7C5900D79E34 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6936AD6050333C664429DC7B /* Pods-OSL-Calendar-IOS-AppUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -536,6 +690,7 @@
 		};
 		761D1BFB224A7C5900D79E34 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F53040670D2B687B19E6956D /* Pods-OSL-Calendar-IOS-AppUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

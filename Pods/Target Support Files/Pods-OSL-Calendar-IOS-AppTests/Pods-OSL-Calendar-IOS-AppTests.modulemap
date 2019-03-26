@@ -1,0 +1,6 @@
+framework module Pods_OSL_Calendar_IOS_AppTests {
+  umbrella header "Pods-OSL-Calendar-IOS-AppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
