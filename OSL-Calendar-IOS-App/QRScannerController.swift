@@ -72,6 +72,8 @@ class QRScannerController: UIViewController {
             
             } catch {
                 // If any error occurs, simply print it out and don't continue any more.
+                self.view.hideToastActivity()
+                self.view.makeToast("Unable to access camera, make sure permissions are allowed in Settings", position: .center)
                 print(error)
                 return
             }

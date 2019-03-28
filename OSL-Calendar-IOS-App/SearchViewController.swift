@@ -234,6 +234,7 @@ class SearchViewController: UITableViewController, Return {
     
     func databaseListener() {
         database.observe(DataEventType.value, with: { (snapshot) in
+            self.sortedArray = []
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
                 let postDict = snap.value as? NSDictionary
                 let name = postDict?["name"] as? String ?? ""
