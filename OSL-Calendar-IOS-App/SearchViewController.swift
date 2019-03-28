@@ -66,7 +66,7 @@ class SearchViewController: UITableViewController, Return {
         let event = sortedArray[indexPath.row]
         cell.textLabel?.text = "\(event.getName())"
         cell.imageView?.image = UIImage(named: "augieIcon")
-        cell.detailTextLabel?.text = "\(event.getDate()), \(event.getLocation()), \(event.getOrganization())"
+        cell.detailTextLabel?.text = "\(event.getLocation()), \(event.getDate()), \(event.getTimes()), \(event.getOrganization())"
         
         cell.backgroundColor = UIColor.clear
         cell.textLabel?.textColor = Theme.sharedInstance.textColor
@@ -238,13 +238,13 @@ class SearchViewController: UITableViewController, Return {
                 let postDict = snap.value as? NSDictionary
                 let name = postDict?["name"] as? String ?? ""
                 let location = postDict?["location"] as? String ?? ""
-                let date = postDict?["date"] as? String ?? ""
+                let startDate = postDict?["startDate"] as? String ?? ""
+                let duration = postDict?["duration"] as? Int ?? 0
                 let organization = postDict?["organization"] as? String ?? ""
-                let type = postDict?["type"] as? String ?? ""
                 let tags = postDict?["tags"] as? String ?? ""
                 let imgid = postDict?["imgid"] as? String ?? ""
                 let description = postDict?["description"] as? String ?? ""
-                let event = Event(name: name, location: location, date: date, organization: organization, type: type, tags: tags, imgid: imgid, description: description)
+                let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description)
                 self.sortedArray.append(event)
             }
             self.tableView.reloadData()

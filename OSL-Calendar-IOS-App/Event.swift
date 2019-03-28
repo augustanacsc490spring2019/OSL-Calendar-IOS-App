@@ -12,19 +12,19 @@ class Event {
     
     var name = ""
     var location = ""
-    var date = ""
+    var startDate = ""
+    var duration = 0
     var organization = ""
-    var type = ""
     var tags = ""
     var imgid = ""
     var description = ""
     
-    init(name: String, location: String, date: String, organization: String, type: String, tags: String, imgid: String, description: String) {
+    init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String) {
         self.name = name
         self.location = location
-        self.date = date
+        self.startDate = startDate
+        self.duration = duration
         self.organization = organization
-        self.type = type
         self.tags = tags
         self.imgid = imgid
         self.description = description
@@ -38,16 +38,52 @@ class Event {
         return self.location
     }
     
+    func getFullDate() -> String {
+        return self.startDate
+    }
+    
     func getDate() -> String {
-        return self.date
+        let array = startDate.split(separator: " ")
+        return "\(String(array[0]))"
+    }
+    
+    func getTimes() -> String {
+        let array = startDate.split(separator: " ")
+        let dateAsString = array[1]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let time24 = dateFormatter.date(from: String(dateAsString))
+        dateFormatter.dateFormat = "h:mm a"
+        let startTime = dateFormatter.string(from: time24!)
+        var minutes = DateComponents.init()
+        minutes.minute = getDuration()
+        let addTime = Calendar.current.date(byAdding: minutes, to: time24!)
+        return "\(startTime)-\(dateFormatter.string(from: addTime!))"
+    }
+    
+    func getStartDate() -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        let date = dateFormatter.date(from:startDate)
+        return date!
+    }
+    
+    func getEndDate() -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        let date = dateFormatter.date(from:startDate)
+        var minutes = DateComponents.init()
+        minutes.minute = getDuration()
+        let addTime = Calendar.current.date(byAdding: minutes, to: date!)
+        return addTime!
+    }
+    
+    func getDuration() -> Int {
+        return self.duration
     }
     
     func getOrganization() -> String {
         return self.organization
-    }
-    
-    func getType() -> String {
-        return self.type
     }
     
     func getTags() -> String {
@@ -70,16 +106,16 @@ class Event {
         self.location = location
     }
     
-    func setDate(date: String) {
-        self.date = date
+    func setStartDate(startDate: String) {
+        self.startDate = startDate
+    }
+    
+    func setDuration(duration: Int) {
+        self.duration = duration
     }
     
     func setOrganization(organization: String) {
         self.organization = organization
-    }
-    
-    func setType(type: String) {
-        self.type = type
     }
     
     func setTags(tags: String) {

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import EventKit
 
 protocol Return {
     func returnFromEventView()
@@ -15,7 +16,7 @@ protocol Return {
 
 class EventViewController: UIViewController, DisplayEvent, UIScrollViewDelegate {
     
-    var event: Event = Event(name: "", location: "", date: "", organization: "", type: "", tags: "", imgid: "", description: "")
+    var event: Event = Event(name: "", location: "", startDate: "", duration: 0, organization: "", tags: "", imgid: "", description: "")
     var delegate: Return?
     var labels: [UILabel] = []
     var index = 10
@@ -75,6 +76,8 @@ class EventViewController: UIViewController, DisplayEvent, UIScrollViewDelegate 
         imageView.frame = CGRect(x: bounds.width/4, y: bounds.height/7, width: bounds.width/2, height: bounds.width/2)
         makeLabel(text: "Name: \(event.getName())", size: 20)
         makeLabel(text: "Location: \(event.getLocation())", size: 20)
+        makeLabel(text: "Date: \(event.getDate())", size: 20)
+        makeLabel(text: "Time: \(event.getTimes())", size: 20)
         makeLabel(text: "Organization: \(event.getOrganization())", size: 20)
         makeLabel(text: "Description: \(event.getDescription())", size: 20)
         addCalendarButton()
@@ -94,7 +97,31 @@ class EventViewController: UIViewController, DisplayEvent, UIScrollViewDelegate 
     }
     
     @objc func calendarAction() {
-        
+        let eventStore = EKEventStore()
+        eventStore.requestAccess(to: .event, completion: { (granted, error) in
+            if (granted) && (error == nil) {
+                let event = EKEvent(eventStore: eventStore)
+                event.title = self.event.getName()
+                print(self.event.getStartDate())
+                event.startDate = self.event.getStartDate()
+                print(self.event.getEndDate())
+                event.endDate = self.event.getEndDate()
+                event.notes = self.event.getDescription()
+                event.calendar = eventStore.defaultCalendarForNewEvents
+                do {
+                    try eventStore.save(event, span: .thisEvent)
+                } catch let e as NSError {
+                    //completion?(false, e)
+                    return
+                }
+                //completion?(true, nil)
+            } else {
+                //completion?(false, error as NSError?)
+            }
+        })
+        self.view.makeToast("Added event to calendar")
+        self.calendarButton.isEnabled = false
+        self.calendarButton.setTitle("Added", for: .normal)
     }
     
     func makeLabel(text: String, size: CGFloat) {
@@ -110,7 +137,7 @@ class EventViewController: UIViewController, DisplayEvent, UIScrollViewDelegate 
         label.font = UIFont(name: "San Fransisco", size: size)
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.numberOfLines = 0
-        index = index + 2
+        index = index + 1
         labels.append(label)
     }
     
