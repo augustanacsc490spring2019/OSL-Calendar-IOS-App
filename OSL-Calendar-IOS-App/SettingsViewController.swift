@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import SimpleCheckbox
+import GoogleSignIn
+import FirebaseAuth
 
 class SettingsViewController: UIViewController {
     
@@ -76,7 +78,17 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func signOutAction(_ sender: UIButton) {
-        
+        GIDSignIn.sharedInstance()?.signOut()
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        let googleSignIn = self.storyboard?.instantiateViewController(withIdentifier: "tab") as? GoogleSignInViewController ?? GoogleSignInViewController()
+        googleSignIn.definesPresentationContext = true
+        googleSignIn.modalPresentationStyle = .fullScreen
+        self.present(googleSignIn, animated: true, completion: nil)
     }
     
     func makeLabel(text: String, left: CGFloat) {

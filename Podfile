@@ -11,7 +11,8 @@ target 'OSL-Calendar-IOS-App' do
   pod 'Toast-Swift'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
-  pod 'QRCodeReader.swift'
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
 
   target 'OSL-Calendar-IOS-AppTests' do
     inherit! :search_paths

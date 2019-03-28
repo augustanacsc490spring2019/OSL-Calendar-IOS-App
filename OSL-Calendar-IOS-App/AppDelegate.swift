@@ -8,16 +8,83 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
+
+var email: String = ""
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        Auth.auth().addStateDidChangeListener { auth, user in
+            if let user = user {
+                email = user.email!
+                let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                self.window?.rootViewController = initialViewControlleripad
+                self.window?.makeKeyAndVisible()
+            } else {
+                
+            }
+        }
         return true
+    }
+    
+    // Handle URL for Google sign in
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any])
+        -> Bool {
+            return GIDSignIn.sharedInstance().handle(url, sourceApplication:options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String, annotation: [:])
+    }
+    
+    // Handle Google/Firebase sign in
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        // Cancelled Google sign in
+        if let err = error {
+            print(err)
+            self.window?.rootViewController?.view.hideToastActivity()
+            self.window?.rootViewController?.view.isUserInteractionEnabled = true
+            return
+        }
+        
+        // Successful Google sign in
+        guard let authentication = user.authentication else { return }
+        let credentials = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                                                       accessToken: authentication.accessToken)
+        
+        // Authenticate with Firebase
+        Auth.auth().signInAndRetrieveData(with: credentials, completion: { (user, error) in
+            
+            // Error authenticating with Firebase
+            if let err = error {
+                print(err)
+                return
+            }
+            
+            // Successful Firebase authentication
+            guard let userUnwrapped = Auth.auth().currentUser else {return}
+            email = userUnwrapped.email!
+            
+            // Check if Augustana email address
+            if (email.contains("@augustana.edu")) {
+                let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                self.window?.rootViewController = initialViewControlleripad
+                self.window?.makeKeyAndVisible()
+            } else { // Not Augustana email address, force sign out
+                self.window?.rootViewController?.view.hideToastActivity()
+                self.window?.rootViewController?.view.isUserInteractionEnabled = true
+                self.window?.makeToast("Must login with Augustana email!", position: .bottom)
+                GIDSignIn.sharedInstance().signOut()
+            }
+        })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

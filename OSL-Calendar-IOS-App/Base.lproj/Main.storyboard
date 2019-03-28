@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="JAX-Lc-qeP">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,10 +10,28 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Google Sign In View Controller-->
+        <scene sceneID="vaE-CX-2kg">
+            <objects>
+                <viewController storyboardIdentifier="signIn" id="JAX-Lc-qeP" customClass="GoogleSignInViewController" customModule="OSL_Calendar_IOS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AvQ-SB-0Dr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="8wa-a4-Wrg"/>
+                    </view>
+                    <connections>
+                        <segue destination="49e-Tb-3d3" kind="presentation" id="CfW-8v-b3w"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0E3-q5-h7m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-946" y="0.0"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tab" id="49e-Tb-3d3" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -46,22 +64,47 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="Kac-C0-4DM" kind="presentation" id="h6Q-1j-elD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z9m-G4-33g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1688.8" y="-678.71064467766121"/>
+            <point key="canvasLocation" x="1689" y="-679"/>
         </scene>
-        <!--QR Reader-->
-        <scene sceneID="4Zh-qw-WHR">
+        <!--Event Details-->
+        <scene sceneID="CAk-K5-2zX">
             <objects>
-                <viewController id="PL7-lg-7a4" customClass="QRViewController" customModule="OSL_Calendar_IOS_App" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="N5z-uS-YLu">
+                <viewController storyboardIdentifier="event" id="ohO-eK-PFe" customClass="EventViewController" customModule="OSL_Calendar_IOS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uDl-Di-eLJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="OJP-oq-MkW"/>
+                        <viewLayoutGuide key="safeArea" id="baH-Le-2N1"/>
                     </view>
-                    <navigationItem key="navigationItem" title="QR Reader" id="jvg-Ek-7jd"/>
+                    <navigationItem key="navigationItem" title="Event Details" id="Ffn-AP-gxX">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="THf-yn-dlo">
+                            <connections>
+                                <action selector="backAction:" destination="ohO-eK-PFe" id="xlt-8u-lAQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3p2-3O-3k6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3508" y="-679.61019490254876"/>
+        </scene>
+        <!--Scan QR-->
+        <scene sceneID="4Zh-qw-WHR">
+            <objects>
+                <viewController id="PL7-lg-7a4" customClass="QRScannerController" customModule="OSL_Calendar_IOS_App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="X26-aC-7KX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="E25-Ig-hSw"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Scan QR" id="jvg-Ek-7jd"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yap-Kf-kr0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -139,6 +182,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pLX-dR-6o6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="749.60000000000002" y="681.40929535232385"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="MNT-cq-Xd6">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Kac-C0-4DM" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vih-4h-R3A">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ohO-eK-PFe" kind="relationship" relationship="rootViewController" id="8fK-4i-Lgv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RJ7-Pr-LCj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2568.8000000000002" y="-679.61019490254876"/>
         </scene>
     </scenes>
     <resources>

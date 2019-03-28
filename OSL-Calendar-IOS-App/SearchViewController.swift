@@ -15,9 +15,14 @@ import Toast_Swift
 enum Sort {
     case az
     case za
+    // other cases
 }
 
-class SearchViewController: UITableViewController {
+protocol DisplayEvent {
+    func getEvent(event: Event)
+}
+
+class SearchViewController: UITableViewController, Return {
     
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
@@ -31,6 +36,8 @@ class SearchViewController: UITableViewController {
     var firstSort = true
     var sortButton = UIBarButtonItem()
     var sortBy: Sort = Sort.az
+    var eventController = EventViewController()
+    var isEvent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +65,8 @@ class SearchViewController: UITableViewController {
         
         let event = sortedArray[indexPath.row]
         cell.textLabel?.text = "\(event.getName())"
-        cell.detailTextLabel?.text = "Date: \(event.getDate()), Location: \(event.getLocation()), Organization: \(event.getOrganization())"
+        cell.imageView?.image = UIImage(named: "augieIcon")
+        cell.detailTextLabel?.text = "\(event.getDate()), \(event.getLocation()), \(event.getOrganization())"
         
         cell.backgroundColor = UIColor.clear
         cell.textLabel?.textColor = Theme.sharedInstance.textColor
@@ -68,13 +76,32 @@ class SearchViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        isEvent = true
+        let event = sortedArray[indexPath.row]
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        eventController = self.storyboard?.instantiateViewController(withIdentifier: "event") as? EventViewController ?? EventViewController()
+        self.definesPresentationContext = true
+        eventController.delegate = self
+        self.eventController.getEvent(event: event)
+        let navigationController = UINavigationController(rootViewController: eventController)
+        navigationController.modalPresentationStyle = .overCurrentContext
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("View Will Appear: Search")
+        if (isEvent == true) {
+            eventController.viewWillAppear(animated)
+        }
         setTheme()
+    }
+    
+    func returnFromEventView() {
+        isEvent = false
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.view.setNeedsLayout()
+        tableView.reloadData()
     }
     
     @IBAction func sortAction(_ sender: Any) {

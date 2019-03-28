@@ -15,8 +15,10 @@
 		761D1BD9224A7C5900D79E34 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 761D1BD7224A7C5900D79E34 /* LaunchScreen.storyboard */; };
 		761D1BE4224A7C5900D79E34 /* OSL_Calendar_IOS_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761D1BE3224A7C5900D79E34 /* OSL_Calendar_IOS_AppTests.swift */; };
 		761D1BEF224A7C5900D79E34 /* OSL_Calendar_IOS_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761D1BEE224A7C5900D79E34 /* OSL_Calendar_IOS_AppUITests.swift */; };
+		762108F4224C455D00E13A3E /* QRScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F3224C455D00E13A3E /* QRScannerController.swift */; };
+		762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */; };
+		762108F8224C711900E13A3E /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F7224C711900E13A3E /* EventViewController.swift */; };
 		7669234C224A800500145FBE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234B224A800500145FBE /* SearchViewController.swift */; };
-		7669234E224A801300145FBE /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234D224A801300145FBE /* QRViewController.swift */; };
 		76692350224A801E00145FBE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234F224A801E00145FBE /* SettingsViewController.swift */; };
 		76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478F9224A827500B66CD2 /* ThemeManager.swift */; };
 		76B478FC224A828000B66CD2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478FB224A828000B66CD2 /* Event.swift */; };
@@ -56,8 +58,10 @@
 		761D1BEA224A7C5900D79E34 /* OSL-Calendar-IOS-AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OSL-Calendar-IOS-AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761D1BEE224A7C5900D79E34 /* OSL_Calendar_IOS_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSL_Calendar_IOS_AppUITests.swift; sourceTree = "<group>"; };
 		761D1BF0224A7C5900D79E34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		762108F3224C455D00E13A3E /* QRScannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerController.swift; sourceTree = "<group>"; };
+		762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInViewController.swift; sourceTree = "<group>"; };
+		762108F7224C711900E13A3E /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		7669234B224A800500145FBE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		7669234D224A801300145FBE /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		7669234F224A801E00145FBE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76B478F9224A827500B66CD2 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		76B478FB224A828000B66CD2 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -148,8 +152,10 @@
 			isa = PBXGroup;
 			children = (
 				761D1BCC224A7C5400D79E34 /* AppDelegate.swift */,
+				762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */,
 				7669234B224A800500145FBE /* SearchViewController.swift */,
-				7669234D224A801300145FBE /* QRViewController.swift */,
+				762108F7224C711900E13A3E /* EventViewController.swift */,
+				762108F3224C455D00E13A3E /* QRScannerController.swift */,
 				7669234F224A801E00145FBE /* SettingsViewController.swift */,
 				76B478F9224A827500B66CD2 /* ThemeManager.swift */,
 				76B478FB224A828000B66CD2 /* Event.swift */,
@@ -192,6 +198,7 @@
 				761D1BC6224A7C5400D79E34 /* Frameworks */,
 				761D1BC7224A7C5400D79E34 /* Resources */,
 				0CC839C35122BE34257E6AF4 /* [CP] Embed Pods Frameworks */,
+				8F32737F409D696B09009887 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,8 +328,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
-				"${BUILT_PRODUCTS_DIR}/QRCodeReader.swift/QRCodeReader.framework",
 				"${BUILT_PRODUCTS_DIR}/SimpleCheckbox/SimpleCheckbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -332,8 +340,9 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QRCodeReader.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SimpleCheckbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -342,6 +351,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F32737F409D696B09009887 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		92103CC57EBFBD56B8507E15 /* [CP] Check Pods Manifest.lock */ = {
@@ -417,10 +448,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */,
 				7669234C224A800500145FBE /* SearchViewController.swift in Sources */,
 				761D1BCD224A7C5400D79E34 /* AppDelegate.swift in Sources */,
 				76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */,
-				7669234E224A801300145FBE /* QRViewController.swift in Sources */,
+				762108F4224C455D00E13A3E /* QRScannerController.swift in Sources */,
+				762108F8224C711900E13A3E /* EventViewController.swift in Sources */,
 				76B478FC224A828000B66CD2 /* Event.swift in Sources */,
 				76692350224A801E00145FBE /* SettingsViewController.swift in Sources */,
 			);
