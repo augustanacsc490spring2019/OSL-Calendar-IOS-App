@@ -20,21 +20,72 @@ protocol Return {
 
 class EventViewController: UIViewController, DisplayEvent {
     
-    var event: Event = Event(name: "", location: "", startDate: "", duration: 0, organization: "", tags: "", imgid: "", description: "")
+    var event : Event? {
+        didSet {
+            eventImage.image = event?.image
+            eventNameLabel.text = event?.name
+            var description = ""
+            if let location = event?.getLocation() {
+                description = "\(description)Location: \(location)"
+            }
+            if let date = event?.getDate() {
+                description = "\(description)\nDate: \(date)"
+            }
+            if let time = event?.getTimes() {
+                description = "\(description)\nTime: \(time)"
+            }
+            if let organization = event?.getOrganization() {
+                description = "\(description)\nOrganization: \(organization)"
+            }
+            eventDescriptionLabel.text = description
+        }
+    }
+    
+    let eventNameLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .black
+        lbl.font = UIFont.boldSystemFont(ofSize: 32)
+        lbl.textAlignment = .center
+        lbl.adjustsFontSizeToFitWidth = true
+        return lbl
+    }()
+    
+    
+    let eventDescriptionLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .black
+        lbl.font = UIFont.systemFont(ofSize: 16)
+        lbl.textAlignment = .center
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.numberOfLines = 0
+        return lbl
+    }()
+    
+    private let eventImage : UIImageView = {
+        let imgView = UIImageView(image: UIImage(named: "augieIcon"))
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    
+    private let calendarButton : UIButton = {
+        let btn = UIButton()
+        btn.contentMode = .scaleAspectFit
+        btn.clipsToBounds = true
+        btn.setTitle("Add to Calendar", for: .normal)
+        btn.backgroundColor = Theme.sharedInstance.buttonColor
+        btn.setTitleColor(.black, for: .normal)
+        return btn
+    }()
+    
     var delegate: Return?
-    var labels: [UILabel] = []
-    var index: CGFloat = 15
-    var image = UIImageView()
-    var calendarButton = UIButton()
     var scrollView = UIScrollView()
     var containerView = UIView()
-    var fixedHeightOfLabel: CGFloat = 20
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpScrollView()
         generateLayout()
-        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width, height: index*fixedHeightOfLabel)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,30 +119,22 @@ class EventViewController: UIViewController, DisplayEvent {
     }
     
     func generateLayout() {
-        let imageView = UIImageView(image: UIImage(named: "augieIcon"))
-        scrollView.addSubview(imageView)
-        let bounds = UIScreen.main.bounds
-        imageView.frame = CGRect(x: bounds.width/4, y: bounds.height/20, width: bounds.width/2, height: bounds.width/2)
-        makeLabel(text: "Name: \(event.getName())", size: 20)
-        makeLabel(text: "Location: \(event.getLocation())", size: 20)
-        makeLabel(text: "Date: \(event.getDate())", size: 20)
-        makeLabel(text: "Time: \(event.getTimes())", size: 20)
-        makeLabel(text: "Organization: \(event.getOrganization())", size: 20)
-        makeLabel(text: "Description: \(event.getDescription())", size: 20)
-        addCalendarButton()
-    }
-    
-    func addCalendarButton() {
-        calendarButton.setTitle("Add to Calendar", for: .normal)
-        calendarButton.setTitleColor(.black, for: .normal)
-        calendarButton.backgroundColor = UIColor.init(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
-        calendarButton.translatesAutoresizingMaskIntoConstraints=false
+        scrollView.addSubview(eventImage)
+        scrollView.addSubview(eventNameLabel)
+        scrollView.addSubview(eventDescriptionLabel)
         scrollView.addSubview(calendarButton)
-        index = index + 2
-        calendarButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: index * fixedHeightOfLabel).isActive = true
-        calendarButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20).isActive = true
-        calendarButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20).isActive = true
-        calendarButton.heightAnchor.constraint(equalToConstant: CGFloat(45)).isActive = true
+        
+        eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        eventNameLabel.center.x = scrollView.center.x
+        
+        eventImage.anchor(top: eventNameLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 3*UIScreen.main.bounds.width/4, height: 3*UIScreen.main.bounds.width/4, enableInsets: false)
+        eventImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        
+        eventDescriptionLabel.anchor(top: eventImage.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        eventDescriptionLabel.center.x = scrollView.center.x
+        
+        calendarButton.anchor(top: eventDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        calendarButton.center.x = scrollView.center.x
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
     }
     
@@ -103,15 +146,15 @@ class EventViewController: UIViewController, DisplayEvent {
         eventStore.requestAccess(to: .event, completion: { (granted, error) in
             if (granted) && (error == nil) {
                 let event = EKEvent(eventStore: eventStore)
-                event.title = self.event.getName()
-                event.startDate = self.event.getStartDate()
-                event.endDate = self.event.getEndDate()
-                event.notes = self.event.getDescription()
+                event.title = self.event!.getName()
+                event.startDate = self.event!.getStartDate()
+                event.endDate = self.event!.getEndDate()
+                event.notes = self.event!.getDescription()
                 event.calendar = eventStore.defaultCalendarForNewEvents
-                let predicate = eventStore.predicateForEvents(withStart: self.event.getStartDate(), end: self.event.getEndDate(), calendars: nil)
+                let predicate = eventStore.predicateForEvents(withStart: self.event!.getStartDate(), end: self.event!.getEndDate(), calendars: nil)
                 let existingEvents = eventStore.events(matching: predicate)
                 for singleEvent in existingEvents {
-                    if singleEvent.title == self.event.getName() && singleEvent.startDate == self.event.getStartDate() && singleEvent.endDate == self.event.getEndDate() {
+                    if singleEvent.title == self.event!.getName() && singleEvent.startDate == self.event!.getStartDate() && singleEvent.endDate == self.event!.getEndDate() {
                         isExistingEvent = true
                     }
                 }
@@ -143,10 +186,10 @@ class EventViewController: UIViewController, DisplayEvent {
         eventStore.requestAccess(to: .event, completion: { (granted, error) in
             if (granted) && (error == nil) {
                 let event = EKEvent(eventStore: eventStore)
-                event.title = self.event.getName()
-                event.startDate = self.event.getStartDate()
-                event.endDate = self.event.getEndDate()
-                event.notes = self.event.getDescription()
+                event.title = self.event!.getName()
+                event.startDate = self.event!.getStartDate()
+                event.endDate = self.event!.getEndDate()
+                event.notes = self.event!.getDescription()
                 event.calendar = eventStore.defaultCalendarForNewEvents
                 do {
                     try eventStore.save(event, span: .thisEvent)
@@ -168,32 +211,15 @@ class EventViewController: UIViewController, DisplayEvent {
         }
     }
     
-    func makeLabel(text: String, size: CGFloat) {
-        let label = UILabel()
-        label.text = text
-        label.textColor = Theme.sharedInstance.textColor
-        label.translatesAutoresizingMaskIntoConstraints=false
-        scrollView.addSubview(label)
-        label.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: index*fixedHeightOfLabel).isActive = true
-        label.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        label.textAlignment = .center
-        label.font = UIFont(name: "San Fransisco", size: size)
-        label.sizeToFit()
-        label.lineBreakMode = NSLineBreakMode.byCharWrapping
-        label.numberOfLines = 0
-        index = index + 1
-        labels.append(label)
-    }
-    
     func getEvent(event: Event) {
         self.event = event
     }
     
     func setTheme() {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
-        for label in labels {
-            label.textColor = Theme.sharedInstance.textColor
-        }
+        eventNameLabel.textColor = Theme.sharedInstance.textColor
+        eventDescriptionLabel.textColor = Theme.sharedInstance.textColor
+        calendarButton.backgroundColor = Theme.sharedInstance.buttonColor
     }
     
 }

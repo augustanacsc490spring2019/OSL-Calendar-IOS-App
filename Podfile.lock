@@ -10,6 +10,9 @@ PODS:
   - Firebase/Database (5.18.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (= 5.1.0)
+  - Firebase/Storage (5.18.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (= 3.1.0)
   - FirebaseAnalytics (5.7.0):
     - FirebaseCore (~> 5.3)
     - FirebaseInstanceID (~> 3.6)
@@ -35,6 +38,10 @@ PODS:
     - FirebaseCore (~> 5.2)
     - GoogleUtilities/Environment (~> 5.2)
     - GoogleUtilities/UserDefaults (~> 5.2)
+  - FirebaseStorage (3.1.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 5.2)
+    - GTMSessionFetcher/Core (~> 1.1)
   - GoogleAppMeasurement (5.7.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
@@ -85,6 +92,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - Firebase/Storage
   - GoogleSignIn
   - SimpleCheckbox
   - Toast-Swift
@@ -98,6 +106,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseDatabase
     - FirebaseInstanceID
+    - FirebaseStorage
     - GoogleAppMeasurement
     - GoogleSignIn
     - GoogleToolboxForMac
@@ -116,6 +125,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 52f851b30e11360f1e67cf04b1edfebf0a47a2d3
   FirebaseDatabase: 23acb0c53cd4d4070a427b60100b2e4aaa97c45d
   FirebaseInstanceID: bd6fc5a258884e206fd5c474ebe4f5b00e21770e
+  FirebaseStorage: 29075f874c2b3cf61e5221a62c4ceefc809e5412
   GoogleAppMeasurement: 6cf307834da065863f9faf4c0de0a936d81dd832
   GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
@@ -126,6 +136,6 @@ SPEC CHECKSUMS:
   SimpleCheckbox: 1e59697852ef3caa56a0ed1b40be0f034763b9b9
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
 
-PODFILE CHECKSUM: cc4a3fc909e3fad6c941ce8a2492d8ba7b2fff34
+PODFILE CHECKSUM: 291872348b999d3a7760ef1ab22834d2738637c4
 
 COCOAPODS: 1.6.1

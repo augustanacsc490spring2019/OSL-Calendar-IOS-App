@@ -43,7 +43,7 @@ class SearchViewController: UITableViewController, Return {
         super.viewDidLoad()
         self.view.isUserInteractionEnabled = false
         self.navigationController?.view.makeToastActivity(.center)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellIdentifier")
+        tableView.register(EventCell.self, forCellReuseIdentifier: "cellIdentifier")
         getTheme()
         database = Database.database().reference().child("current-events")
         databaseListener()
@@ -58,19 +58,16 @@ class SearchViewController: UITableViewController, Return {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath)
-        cell = UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "cellIdentifier")
+        var cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! EventCell
         
         print("\(#function) --- section = \(indexPath.section), row = \(indexPath.row)")
         
         let event = sortedArray[indexPath.row]
-        cell.textLabel?.text = "\(event.getName())"
-        cell.imageView?.image = UIImage(named: "augieIcon")
-        cell.detailTextLabel?.text = "\(event.getLocation()), \(event.getDate()), \(event.getTimes()), \(event.getOrganization())"
+        cell.event = event
         
         cell.backgroundColor = UIColor.clear
-        cell.textLabel?.textColor = Theme.sharedInstance.textColor
-        cell.detailTextLabel?.textColor = Theme.sharedInstance.textColor
+        cell.eventNameLabel.textColor = Theme.sharedInstance.textColor
+        cell.eventDescriptionLabel.textColor = Theme.sharedInstance.textColor
         
         return cell
     }
@@ -248,9 +245,11 @@ class SearchViewController: UITableViewController, Return {
                 let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description)
                 self.sortedArray.append(event)
             }
-            self.tableView.reloadData()
-            self.navigationController?.view.hideToastActivity()
-            self.view.isUserInteractionEnabled = true
+            group.notify(queue: .main, execute: {
+                self.tableView.reloadData()
+                self.navigationController?.view.hideToastActivity()
+                self.view.isUserInteractionEnabled = true
+            })
         })
     }
     

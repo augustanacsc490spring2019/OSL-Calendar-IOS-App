@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import FirebaseStorage
 
 class Event {
     
@@ -18,6 +20,7 @@ class Event {
     var tags = ""
     var imgid = ""
     var description = ""
+    var image = UIImage()
     
     init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String) {
         self.name = name
@@ -28,6 +31,23 @@ class Event {
         self.tags = tags
         self.imgid = imgid
         self.description = description
+        group.enter()
+        setImage(completion: { boolean in
+            group.leave()
+        })
+    }
+    
+    func setImage(completion: @escaping (Bool)->() ) {
+        var storage = Storage.storage().reference()
+        var picture = storage.child("Images").child("\(self.imgid).jpg")
+        picture.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                completion(false)
+            } else {
+                self.image = UIImage(data: data!)!
+                completion(true)
+            }
+        }
     }
     
     func getName() -> String {
