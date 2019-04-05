@@ -37,6 +37,9 @@ class EventViewController: UIViewController, DisplayEvent {
             if let organization = event?.getOrganization() {
                 description = "\(description)\nOrganization: \(organization)"
             }
+            if let details = event?.getDescription() {
+                description = "\(description)\nDescription: \(details)"
+            }
             eventDescriptionLabel.text = description
         }
     }
@@ -84,8 +87,6 @@ class EventViewController: UIViewController, DisplayEvent {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpScrollView()
-        generateLayout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,26 +117,6 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
         scrollView.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-    }
-    
-    func generateLayout() {
-        scrollView.addSubview(eventImage)
-        scrollView.addSubview(eventNameLabel)
-        scrollView.addSubview(eventDescriptionLabel)
-        scrollView.addSubview(calendarButton)
-        
-        eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
-        eventNameLabel.center.x = scrollView.center.x
-        
-        eventImage.anchor(top: eventNameLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 3*UIScreen.main.bounds.width/4, height: 3*UIScreen.main.bounds.width/4, enableInsets: false)
-        eventImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
-        
-        eventDescriptionLabel.anchor(top: eventImage.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0, enableInsets: false)
-        eventDescriptionLabel.center.x = scrollView.center.x
-        
-        calendarButton.anchor(top: eventDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
-        calendarButton.center.x = scrollView.center.x
-        calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
     }
     
     func checkEventInCalendar() {
@@ -213,6 +194,27 @@ class EventViewController: UIViewController, DisplayEvent {
     
     func getEvent(event: Event) {
         self.event = event
+        setUpScrollView()
+        scrollView.addSubview(eventImage)
+        scrollView.addSubview(eventNameLabel)
+        scrollView.addSubview(eventDescriptionLabel)
+        scrollView.addSubview(calendarButton)
+        
+        eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        eventNameLabel.center.x = scrollView.center.x
+        
+        if let cgImage = event.image.cgImage {
+            let ratio = CGFloat(cgImage.width) / UIScreen.main.bounds.width
+            eventImage.anchor(top: eventNameLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: CGFloat(cgImage.height) / ratio, enableInsets: false)
+            eventImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        }
+        
+        eventDescriptionLabel.anchor(top: eventImage.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        eventDescriptionLabel.center.x = scrollView.center.x
+        
+        calendarButton.anchor(top: eventDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        calendarButton.center.x = scrollView.center.x
+        calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
     }
     
     func setTheme() {

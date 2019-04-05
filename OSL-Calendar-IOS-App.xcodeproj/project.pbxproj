@@ -155,6 +155,11 @@
 		761D1BCB224A7C5400D79E34 /* OSL-Calendar-IOS-App */ = {
 			isa = PBXGroup;
 			children = (
+				761D1BD2224A7C5400D79E34 /* Main.storyboard */,
+				761D1BD5224A7C5900D79E34 /* Assets.xcassets */,
+				761D1BD7224A7C5900D79E34 /* LaunchScreen.storyboard */,
+				761D1BDA224A7C5900D79E34 /* Info.plist */,
+				76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */,
 				761D1BCC224A7C5400D79E34 /* AppDelegate.swift */,
 				762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */,
 				7669234B224A800500145FBE /* SearchViewController.swift */,
@@ -165,11 +170,6 @@
 				76B478FB224A828000B66CD2 /* Event.swift */,
 				763344E0225684D400FF4802 /* EventCell.swift */,
 				763344E2225685F800FF4802 /* Extension.swift */,
-				761D1BD2224A7C5400D79E34 /* Main.storyboard */,
-				761D1BD5224A7C5900D79E34 /* Assets.xcassets */,
-				761D1BD7224A7C5900D79E34 /* LaunchScreen.storyboard */,
-				761D1BDA224A7C5900D79E34 /* Info.plist */,
-				76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */,
 			);
 			path = "OSL-Calendar-IOS-App";
 			sourceTree = "<group>";
