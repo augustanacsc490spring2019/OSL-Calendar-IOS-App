@@ -18,29 +18,37 @@ protocol Return {
     func returnFromEventView()
 }
 
+func makeLabel(text: String, font: UIFont) -> UILabel {
+    let lbl = UILabel()
+    lbl.textColor = .black
+    lbl.font = font
+    lbl.textAlignment = .left
+    lbl.numberOfLines = 0
+    lbl.text = "\(text)"
+    return lbl
+}
+
 class EventViewController: UIViewController, DisplayEvent {
     
     var event : Event? {
         didSet {
             eventImage.image = event?.image
             eventNameLabel.text = event?.name
-            var description = ""
             if let location = event?.getLocation() {
-                description = "\(description)Location: \(location)"
+                locationLabel.text = "\(location)"
             }
             if let date = event?.getDate() {
-                description = "\(description)\nDate: \(date)"
+                dateLabel.text = "\(date)"
             }
             if let time = event?.getTimes() {
-                description = "\(description)\nTime: \(time)"
+                timeLabel.text = "\(time)"
             }
             if let organization = event?.getOrganization() {
-                description = "\(description)\nOrganization: \(organization)"
+                organizationLabel.text = "\(organization)"
             }
             if let details = event?.getDescription() {
-                description = "\(description)\nDescription: \(details)"
+                descriptionLabel.text = "\(details)"
             }
-            eventDescriptionLabel.text = description
         }
     }
     
@@ -53,16 +61,17 @@ class EventViewController: UIViewController, DisplayEvent {
         return lbl
     }()
     
+    let locationTitle = makeLabel(text: "Location:", font: UIFont.boldSystemFont(ofSize: 18))
+    let dateTitle = makeLabel(text: "Date:", font: UIFont.boldSystemFont(ofSize: 18))
+    let timeTitle = makeLabel(text: "Time:", font: UIFont.boldSystemFont(ofSize: 18))
+    let organizationTitle = makeLabel(text: "Organization:", font: UIFont.boldSystemFont(ofSize: 18))
+    let descriptionTitle = makeLabel(text: "Description:", font: UIFont.boldSystemFont(ofSize: 18))
     
-    let eventDescriptionLabel : UILabel = {
-        let lbl = UILabel()
-        lbl.textColor = .black
-        lbl.font = UIFont.systemFont(ofSize: 16)
-        lbl.textAlignment = .center
-        lbl.adjustsFontSizeToFitWidth = true
-        lbl.numberOfLines = 0
-        return lbl
-    }()
+    let locationLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
+    let dateLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
+    let timeLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
+    let organizationLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
+    let descriptionLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     
     private let eventImage : UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "augieIcon"))
@@ -161,6 +170,7 @@ class EventViewController: UIViewController, DisplayEvent {
     }
     
     @objc func calendarAction() {
+        impact.impactOccurred()
         let eventStore = EKEventStore()
         var isExistingEvent = false
         group.enter()
@@ -186,18 +196,32 @@ class EventViewController: UIViewController, DisplayEvent {
             group.leave()
         })
         group.notify(queue: .main) {
-            self.view.makeToast("Added event to calendar")
+            self.view.makeToast("Added event to calendar", position: .center)
             self.calendarButton.isEnabled = false
             self.calendarButton.setTitle("Added", for: .normal)
         }
     }
+    
+    let line1 = UILabel()
+    let line2 = UILabel()
     
     func getEvent(event: Event) {
         self.event = event
         setUpScrollView()
         scrollView.addSubview(eventImage)
         scrollView.addSubview(eventNameLabel)
-        scrollView.addSubview(eventDescriptionLabel)
+        scrollView.addSubview(line1)
+        scrollView.addSubview(locationTitle)
+        scrollView.addSubview(locationLabel)
+        scrollView.addSubview(dateTitle)
+        scrollView.addSubview(dateLabel)
+        scrollView.addSubview(timeTitle)
+        scrollView.addSubview(timeLabel)
+        scrollView.addSubview(organizationTitle)
+        scrollView.addSubview(organizationLabel)
+        scrollView.addSubview(descriptionTitle)
+        scrollView.addSubview(descriptionLabel)
+        scrollView.addSubview(line2)
         scrollView.addSubview(calendarButton)
         
         eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
@@ -209,19 +233,43 @@ class EventViewController: UIViewController, DisplayEvent {
             eventImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         }
         
-        eventDescriptionLabel.anchor(top: eventImage.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 0, enableInsets: false)
-        eventDescriptionLabel.center.x = scrollView.center.x
+        line1.anchor(top: eventImage.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
         
-        calendarButton.anchor(top: eventDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        anchorField(titleLabel: locationTitle, descriptionLabel: locationLabel, lastDescriptionLabel: line1, paddingTop: 20)
+        anchorField(titleLabel: dateTitle, descriptionLabel: dateLabel, lastDescriptionLabel: locationLabel, paddingTop: 0)
+        anchorField(titleLabel: timeTitle, descriptionLabel: timeLabel, lastDescriptionLabel: dateLabel, paddingTop: 0)
+        anchorField(titleLabel: organizationTitle, descriptionLabel: organizationLabel, lastDescriptionLabel: timeLabel, paddingTop: 0)
+        anchorField(titleLabel: descriptionTitle, descriptionLabel: descriptionLabel, lastDescriptionLabel: organizationLabel, paddingTop: 0)
+        
+        line2.anchor(top: descriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
+        
+        calendarButton.anchor(top: line2.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         calendarButton.center.x = scrollView.center.x
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
+    }
+    
+    func anchorField(titleLabel: UIView, descriptionLabel: UIView, lastDescriptionLabel: UIView, paddingTop: CGFloat) {
+        titleLabel.anchor(top: lastDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: paddingTop, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        descriptionLabel.anchor(top: lastDescriptionLabel.bottomAnchor, left: nil, bottom: nil, right: containerView.rightAnchor, paddingTop: paddingTop, paddingLeft: 20, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        descriptionLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 150).isActive = true
     }
     
     func setTheme() {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
         eventNameLabel.textColor = Theme.sharedInstance.textColor
-        eventDescriptionLabel.textColor = Theme.sharedInstance.textColor
         calendarButton.backgroundColor = Theme.sharedInstance.buttonColor
+        locationTitle.textColor = Theme.sharedInstance.textColor
+        locationLabel.textColor = Theme.sharedInstance.textColor
+        dateTitle.textColor = Theme.sharedInstance.textColor
+        dateLabel.textColor = Theme.sharedInstance.textColor
+        timeTitle.textColor = Theme.sharedInstance.textColor
+        timeLabel.textColor = Theme.sharedInstance.textColor
+        organizationTitle.textColor = Theme.sharedInstance.textColor
+        organizationLabel.textColor = Theme.sharedInstance.textColor
+        descriptionTitle.textColor = Theme.sharedInstance.textColor
+        descriptionLabel.textColor = Theme.sharedInstance.textColor
+        line1.backgroundColor = Theme.sharedInstance.lineColor
+        line2.backgroundColor = Theme.sharedInstance.lineColor
     }
     
 }

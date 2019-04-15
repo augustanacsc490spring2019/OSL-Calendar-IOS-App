@@ -12,6 +12,8 @@ import Firebase
 import SimpleCheckbox
 import Toast_Swift
 
+let impact = UIImpactFeedbackGenerator()
+
 enum Sort {
     case az
     case za
@@ -24,6 +26,7 @@ protocol DisplayEvent {
 
 class SearchViewController: UITableViewController, Return {
     
+    @IBOutlet weak var sortButton: UIBarButtonItem!
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
     var database: DatabaseReference!
@@ -34,14 +37,13 @@ class SearchViewController: UITableViewController, Return {
     var sortView = UIView()
     var options: [Checkbox] = []
     var firstSort = true
-    var sortButton = UIBarButtonItem()
     var sortBy: Sort = Sort.az
     var eventController = EventViewController()
     var isEvent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.isUserInteractionEnabled = false
+        self.navigationController?.view.isUserInteractionEnabled = false
         self.navigationController?.view.makeToastActivity(.center)
         tableView.register(EventCell.self, forCellReuseIdentifier: "cellIdentifier")
         getTheme()
@@ -104,10 +106,6 @@ class SearchViewController: UITableViewController, Return {
     @IBAction func sortAction(_ sender: Any) {
         if (self.isDown) {
             tableView.isScrollEnabled = false
-            if (firstSort) {
-                firstSort = false
-                setUpSortView()
-            }
             tableView.backgroundColor = Theme.sharedInstance.darkerBackground
             sortView.isHidden = false
             self.view.bringSubviewToFront(sortView)
@@ -116,6 +114,7 @@ class SearchViewController: UITableViewController, Return {
         } else {
             closeSortView()
         }
+        impact.impactOccurred()
     }
     
     func closeSortView() {
@@ -124,6 +123,10 @@ class SearchViewController: UITableViewController, Return {
         tableView.backgroundColor = Theme.sharedInstance.backgroundColor
         self.sortButton.image = UIImage(named: "downSort")
         self.isDown = true
+        sortArray()
+    }
+    
+    func sortArray() {
         if (self.options[0].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.name < $1.name })
             self.sortBy = Sort.az
@@ -131,18 +134,18 @@ class SearchViewController: UITableViewController, Return {
             self.sortedArray = self.sortedArray.sorted(by: { $0.name > $1.name })
             self.sortBy = Sort.za
         } //else if (self.options[2].isChecked) {
-//            self.sortedArray = self.sortedArray.sorted(by: { $0.price < $1.price })
-//            self.sortBy = Sort.priceLowToHigh
-//        } else if (self.options[3].isChecked) {
-//            self.sortedArray = self.sortedArray.sorted(by: { $0.price > $1.price })
-//            self.sortBy = Sort.priceHighToLow
-//        } else if (self.options[4].isChecked) {
-//            self.sortedArray = self.sortedArray.sorted(by: { $0.rating > $1.rating })
-//            self.sortBy = Sort.bestRatingsFirst
-//        } else if (self.options[5].isChecked) {
-//            self.sortedArray = self.sortedArray.sorted(by: { $0.rating < $1.rating })
-//            self.sortBy = Sort.worstRatingsFirst
-//        }
+        //            self.sortedArray = self.sortedArray.sorted(by: { $0.price < $1.price })
+        //            self.sortBy = Sort.priceLowToHigh
+        //        } else if (self.options[3].isChecked) {
+        //            self.sortedArray = self.sortedArray.sorted(by: { $0.price > $1.price })
+        //            self.sortBy = Sort.priceHighToLow
+        //        } else if (self.options[4].isChecked) {
+        //            self.sortedArray = self.sortedArray.sorted(by: { $0.rating > $1.rating })
+        //            self.sortBy = Sort.bestRatingsFirst
+        //        } else if (self.options[5].isChecked) {
+        //            self.sortedArray = self.sortedArray.sorted(by: { $0.rating < $1.rating })
+        //            self.sortBy = Sort.worstRatingsFirst
+        //        }
         tableView.reloadData()
     }
     
@@ -164,28 +167,20 @@ class SearchViewController: UITableViewController, Return {
         makeLabelForRadio(text: "Sort", left: 40)
         makeRadioOption(optionText: "A-Z", left: 40)
         makeRadioOption(optionText: "Z-A", left: 40)
-//        makeRadioOption(optionText: "Price: Low to High", left: 40)
-//        makeRadioOption(optionText: "Price: High to Low", left: 40)
-//        makeRadioOption(optionText: "Best Ratings First", left: 40)
-//        makeRadioOption(optionText: "Worst Ratings First", left: 40)
+        initialSort()
+        setOptionColors()
+    }
+    
+    func initialSort() {
         if (sortBy == Sort.az) {
             options[0].isChecked = true
         } else if (sortBy == Sort.za) {
             options[1].isChecked = true
-        } //else if (sortBy == Sort.priceLowToHigh) {
-//            options[2].isChecked = true
-//        } else if (sortBy == Sort.priceHighToLow) {
-//            options[3].isChecked = true
-//        } else if (sortBy == Sort.bestRatingsFirst) {
-//            options[4].isChecked = true
-//        } else if (sortBy == Sort.worstRatingsFirst) {
-//            options[5].isChecked = true
-//        }
-        setOptionColors()
+        }
     }
     
-    func makeLabelForRadio(text: String, left: CGFloat) {
-        let label = UILabel()
+    func makeLabelForRadio(text: String, left: CGFloat) -> UILabel {
+        let label = CustomLabel()
         label.text = text
         label.textColor = Theme.sharedInstance.textColor
         label.translatesAutoresizingMaskIntoConstraints=false
@@ -195,6 +190,7 @@ class SearchViewController: UITableViewController, Return {
         label.trailingAnchor.constraint(equalTo: sortView.trailingAnchor).isActive = true
         index = index + 1
         labels.append(label)
+        return label
     }
     
     func makeOption(optionText: String, left: CGFloat) -> Checkbox {
@@ -206,8 +202,9 @@ class SearchViewController: UITableViewController, Return {
         option.heightAnchor.constraint(equalToConstant: 25).isActive = true
         option.widthAnchor.constraint(equalToConstant: 25).isActive = true
         option.increasedTouchRadius = 10
-        makeLabelForRadio(text: optionText, left: left+45)
+        let label = makeLabelForRadio(text: optionText, left: left+45)
         options.append(option)
+        createGestures(label: label)
         return option
     }
     
@@ -217,19 +214,13 @@ class SearchViewController: UITableViewController, Return {
         option.borderWidth = 3
         option.checkmarkStyle = .circle
         option.valueChanged = { (isChecked) in
-            let index = self.options.firstIndex(of: option) ?? 0
-            self.options[0].isChecked = false
-            self.options[1].isChecked = false
-//            self.options[2].isChecked = false
-//            self.options[3].isChecked = false
-//            self.options[4].isChecked = false
-//            self.options[5].isChecked = false
-            self.options[index].isChecked = true
-            self.closeSortView()
+            self.handleOptionClick(option: option)
         }
     }
     
     func databaseListener() {
+        self.setTheme()
+        self.setUpSortView()
         database.observe(DataEventType.value, with: { (snapshot) in
             self.sortedArray = []
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
@@ -246,11 +237,41 @@ class SearchViewController: UITableViewController, Return {
                 self.sortedArray.append(event)
             }
             group.notify(queue: .main, execute: {
+                self.sortArray()
                 self.tableView.reloadData()
                 self.navigationController?.view.hideToastActivity()
-                self.view.isUserInteractionEnabled = true
+                self.navigationController?.view.isUserInteractionEnabled = true
             })
         })
+    }
+    
+    func createGestures(label: UILabel) {
+        if options.count == 1 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap1(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 2 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap2(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        }
+        label.isUserInteractionEnabled = true
+    }
+    
+    @objc func handleTap1(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[0])
+    }
+    
+    @objc func handleTap2(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[1])
+    }
+    
+    func handleOptionClick(option: Checkbox) {
+        let index = self.options.firstIndex(of: option) ?? 0
+        for option in options {
+            option.isChecked = false
+        }
+        self.options[index].isChecked = true
+        self.closeSortView()
+        impact.impactOccurred()
     }
     
     func setTheme() {

@@ -27,6 +27,7 @@ class Theme {
     var checkboxColor = UIColor.blue
     var checkboxBackground = UIColor.white
     var buttonColor = UIColor.gray
+    var lineColor = UIColor.darkGray
 }
 
 class ThemeManager {
@@ -40,6 +41,7 @@ class ThemeManager {
         Theme.sharedInstance.checkboxColor = UIColor.blue
         Theme.sharedInstance.checkboxBackground = UIColor.white
         Theme.sharedInstance.buttonColor = UIColor.init(red: 101/255, green: 142/255, blue: 183/255, alpha: 1)
+        Theme.sharedInstance.lineColor = UIColor.darkGray
         saveTheme(theme: "white")
     }
     
@@ -52,6 +54,7 @@ class ThemeManager {
         Theme.sharedInstance.checkboxColor = UIColor.black
         Theme.sharedInstance.checkboxBackground = UIColor.white
         Theme.sharedInstance.buttonColor = .lightGray
+        Theme.sharedInstance.lineColor = UIColor.lightGray
         saveTheme(theme: "dark")
     }
     
@@ -64,6 +67,7 @@ class ThemeManager {
         Theme.sharedInstance.checkboxColor = UIColor.init(red: 0/255, green: 105/255, blue: 148/255, alpha: 1)
         Theme.sharedInstance.checkboxBackground = UIColor.white
         Theme.sharedInstance.buttonColor = UIColor.init(red: 0/255, green: 161/255, blue: 228/255, alpha: 1)
+        Theme.sharedInstance.lineColor = UIColor.lightGray
         saveTheme(theme: "blue")
     }
     
@@ -76,6 +80,7 @@ class ThemeManager {
         Theme.sharedInstance.checkboxColor = UIColor.init(red: 101/255, green: 101/255, blue: 142/255, alpha: 1)
         Theme.sharedInstance.checkboxBackground = UIColor.white
         Theme.sharedInstance.buttonColor = UIColor.init(red: 154/255, green: 129/255, blue: 171/255, alpha: 1)
+        Theme.sharedInstance.lineColor = UIColor.lightGray
         saveTheme(theme: "purple")
     }
     

@@ -38,10 +38,11 @@ class Event {
     }
     
     func setImage(completion: @escaping (Bool)->() ) {
-        var storage = Storage.storage().reference()
-        var picture = storage.child("Images").child("\(self.imgid).jpg")
+        let storage = Storage.storage().reference()
+        let picture = storage.child("Images").child("\(self.imgid).jpg")
         picture.getData(maxSize: 1 * 1024 * 1024) { data, error in
             if let error = error {
+                print(error)
                 completion(false)
             } else {
                 self.image = UIImage(data: data!)!

@@ -65,6 +65,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="sortButton" destination="nLG-Tn-3KA" id="8BG-8r-HbD"/>
                         <segue destination="Kac-C0-4DM" kind="presentation" id="h6Q-1j-elD"/>
                     </connections>
                 </viewController>

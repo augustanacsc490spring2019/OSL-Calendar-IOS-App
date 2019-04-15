@@ -18,6 +18,7 @@
 		762108F4224C455D00E13A3E /* QRScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F3224C455D00E13A3E /* QRScannerController.swift */; };
 		762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */; };
 		762108F8224C711900E13A3E /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F7224C711900E13A3E /* EventViewController.swift */; };
+		762421F2225FB8B100753C20 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762421F1225FB8B100753C20 /* CustomLabel.swift */; };
 		763344E1225684D400FF4802 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763344E0225684D400FF4802 /* EventCell.swift */; };
 		763344E3225685F800FF4802 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763344E2225685F800FF4802 /* Extension.swift */; };
 		7669234C224A800500145FBE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7669234B224A800500145FBE /* SearchViewController.swift */; };
@@ -63,6 +64,7 @@
 		762108F3224C455D00E13A3E /* QRScannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerController.swift; sourceTree = "<group>"; };
 		762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInViewController.swift; sourceTree = "<group>"; };
 		762108F7224C711900E13A3E /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		762421F1225FB8B100753C20 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		763344E0225684D400FF4802 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		763344E2225685F800FF4802 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		7669234B224A800500145FBE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				76B478FB224A828000B66CD2 /* Event.swift */,
 				763344E0225684D400FF4802 /* EventCell.swift */,
 				763344E2225685F800FF4802 /* Extension.swift */,
+				762421F1225FB8B100753C20 /* CustomLabel.swift */,
 			);
 			path = "OSL-Calendar-IOS-App";
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 			files = (
 				762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */,
 				763344E1225684D400FF4802 /* EventCell.swift in Sources */,
+				762421F2225FB8B100753C20 /* CustomLabel.swift in Sources */,
 				7669234C224A800500145FBE /* SearchViewController.swift in Sources */,
 				761D1BCD224A7C5400D79E34 /* AppDelegate.swift in Sources */,
 				76B478FA224A827500B66CD2 /* ThemeManager.swift in Sources */,

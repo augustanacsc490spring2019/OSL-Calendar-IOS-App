@@ -73,6 +73,7 @@ class SettingsViewController: UIViewController {
         signOutButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: CGFloat(index) * fixedHeightOfLabel).isActive = true
         signOutButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20).isActive = true
         signOutButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20).isActive = true
+        signOutButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
         signOutButton.heightAnchor.constraint(equalToConstant: fixedHeightOfLabel).isActive = true
         signOutButton.addTarget(self, action: #selector(signOutAction(_:)), for: .touchUpInside)
     }
@@ -91,8 +92,8 @@ class SettingsViewController: UIViewController {
         self.present(googleSignIn, animated: true, completion: nil)
     }
     
-    func makeLabel(text: String, left: CGFloat) {
-        let label = UILabel()
+    func makeLabel(text: String, left: CGFloat) -> UILabel {
+        let label = CustomLabel()
         label.text = text
         label.textColor = Theme.sharedInstance.textColor
         label.translatesAutoresizingMaskIntoConstraints=false
@@ -102,6 +103,7 @@ class SettingsViewController: UIViewController {
         label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
         index = index + 1
         labels.append(label)
+        return label
     }
     
     func makeOption(optionText: String, left: CGFloat) -> Checkbox {
@@ -113,8 +115,9 @@ class SettingsViewController: UIViewController {
         option.heightAnchor.constraint(equalToConstant: 25).isActive = true
         option.widthAnchor.constraint(equalToConstant: 25).isActive = true
         option.increasedTouchRadius = 10
-        makeLabel(text: optionText, left: left+45)
+        let label = makeLabel(text: optionText, left: left+45)
         options.append(option)
+        createGestures(label: label)
         return option
     }
     
@@ -122,16 +125,54 @@ class SettingsViewController: UIViewController {
         let option = makeOption(optionText: optionText, left: left)
         option.borderStyle = .circle
         option.borderWidth = 3
+        option.useHapticFeedback = false
         option.checkmarkStyle = .circle
         option.valueChanged = { (isChecked) in
-            let index = self.options.firstIndex(of: option) ?? 0
-            self.options[0].isChecked = false
-            self.options[1].isChecked = false
-            self.options[2].isChecked = false
-            self.options[3].isChecked = false
-            self.options[index].isChecked = true
-            self.switchTheme()
+            self.handleOptionClick(option: option)
         }
+    }
+    
+    func createGestures(label: UILabel) {
+        if options.count == 1 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap1(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 2 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap2(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 3 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap3(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 4 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap4(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        }
+        label.isUserInteractionEnabled = true
+    }
+    
+    @objc func handleTap1(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[0])
+    }
+    
+    @objc func handleTap2(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[1])
+    }
+    
+    @objc func handleTap3(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[2])
+    }
+    
+    @objc func handleTap4(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[3])
+    }
+    
+    @objc func handleOptionClick(option: Checkbox) {
+        let index = self.options.firstIndex(of: option) ?? 0
+        for option in options {
+            option.isChecked = false
+        }
+        self.options[index].isChecked = true
+        self.switchTheme()
+        impact.impactOccurred()
     }
     
     func switchTheme() {
