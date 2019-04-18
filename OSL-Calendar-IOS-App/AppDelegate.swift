@@ -25,13 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 email = user.email!
-                let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
-                self.window = UIWindow(frame: UIScreen.main.bounds)
-                self.window?.rootViewController = initialViewControlleripad
-                self.window?.makeKeyAndVisible()
+                if (email.contains("@augustana.edu")) {
+                    self.continueToTabView()
+                } else {
+                    self.signOut()
+                }
             } else {
-                
             }
         }
         return true
@@ -68,23 +67,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
             
             // Successful Firebase authentication
-            guard let userUnwrapped = Auth.auth().currentUser else {return}
-            email = userUnwrapped.email!
-            
-            // Check if Augustana email address
-            if (email.contains("@augustana.edu")) {
-                let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
-                self.window = UIWindow(frame: UIScreen.main.bounds)
-                self.window?.rootViewController = initialViewControlleripad
-                self.window?.makeKeyAndVisible()
-            } else { // Not Augustana email address, force sign out
-                self.window?.rootViewController?.view.hideToastActivity()
-                self.window?.rootViewController?.view.isUserInteractionEnabled = true
-                self.window?.makeToast("Must login with Augustana email!", position: .bottom)
-                GIDSignIn.sharedInstance().signOut()
-            }
+            // Triggers state did change listener
         })
+    }
+    
+    func continueToTabView() {
+        let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = initialViewControlleripad
+        self.window?.makeKeyAndVisible()
+    }
+    
+    func signOut() {
+        GIDSignIn.sharedInstance().signOut()
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+        self.window?.rootViewController?.view.hideToastActivity()
+        self.window?.rootViewController?.view.isUserInteractionEnabled = true
+        self.window?.makeToast("Must login with Augustana email!", position: .center)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

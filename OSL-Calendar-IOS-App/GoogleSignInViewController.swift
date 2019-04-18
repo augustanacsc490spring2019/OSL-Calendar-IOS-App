@@ -14,12 +14,55 @@ import SpriteKit
 
 class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
+    private let icon : UIImageView = {
+        let imgView = UIImageView(image: UIImage(named: "augieIcon"))
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    
+    let titleLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .black
+        lbl.font = UIFont.boldSystemFont(ofSize: 48)
+        lbl.textAlignment = .center
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.text = "Augie Events"
+        return lbl
+    }()
+    
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1)
         GIDSignIn.sharedInstance().uiDelegate = self
+        addTitle()
+        addIcon()
         addGoogleBtn()
+    }
+    
+    func addTitle() {
+        self.view.addSubview(titleLabel)
+        let margins = self.view.safeAreaLayoutGuide
+        titleLabel.anchor(top: margins.topAnchor, left: margins.leftAnchor, bottom: nil, right: margins.rightAnchor, paddingTop: 20, paddingLeft: 15, paddingBottom: 0, paddingRight: 15, width: 0, height: 0, enableInsets: false)
+        titleLabel.center.x = view.center.x
+        guard let customFont = UIFont(name: "Animo-Light", size: 100) else {
+            fatalError("Failed to load the custom font.")
+        }
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.font = customFont
+        titleLabel.textColor = UIColor.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
+    }
+    
+    func addIcon() {
+        self.view.addSubview(icon)
+        if let cgImage = icon.image?.cgImage {
+            let margins = self.view.safeAreaLayoutGuide
+            let ratio = CGFloat(cgImage.width) / UIScreen.main.bounds.width
+            icon.anchor(top: titleLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width - 50, height: CGFloat(cgImage.height) / ratio - 50, enableInsets: false)
+            icon.centerXAnchor.constraint(equalTo: margins.centerXAnchor).isActive = true
+            icon.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        }
     }
     
     // Construct and add the Google sign in button to the view
@@ -37,8 +80,6 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
     // Handles the action for the loginBtn, shows activity spinner
     @objc func loginAction() {
-//        ToastManager.shared.style.activityBackgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
-//        ToastManager.shared.style.activityIndicatorColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1.0)
         self.view.makeToastActivity(.center)
         self.view.isUserInteractionEnabled = false
     }

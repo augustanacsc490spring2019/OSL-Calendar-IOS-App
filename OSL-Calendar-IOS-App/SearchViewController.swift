@@ -5,6 +5,7 @@
 //  Created by Kyle Workman on 3/26/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  https://www.natashatherobot.com/custom-uitableviewcell-selection-style-color/
 
 import Foundation
 import UIKit
@@ -17,7 +18,8 @@ let impact = UIImpactFeedbackGenerator()
 enum Sort {
     case az
     case za
-    // other cases
+    case soonestFirst
+    case organization
 }
 
 protocol DisplayEvent {
@@ -70,6 +72,10 @@ class SearchViewController: UITableViewController, Return {
         cell.backgroundColor = UIColor.clear
         cell.eventNameLabel.textColor = Theme.sharedInstance.textColor
         cell.eventDescriptionLabel.textColor = Theme.sharedInstance.textColor
+        
+        let customColorView = UIView()
+        customColorView.backgroundColor = Theme.sharedInstance.darkerBackground
+        cell.selectedBackgroundView =  customColorView
         
         return cell
     }
@@ -133,19 +139,13 @@ class SearchViewController: UITableViewController, Return {
         } else if (self.options[1].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.name > $1.name })
             self.sortBy = Sort.za
-        } //else if (self.options[2].isChecked) {
-        //            self.sortedArray = self.sortedArray.sorted(by: { $0.price < $1.price })
-        //            self.sortBy = Sort.priceLowToHigh
-        //        } else if (self.options[3].isChecked) {
-        //            self.sortedArray = self.sortedArray.sorted(by: { $0.price > $1.price })
-        //            self.sortBy = Sort.priceHighToLow
-        //        } else if (self.options[4].isChecked) {
-        //            self.sortedArray = self.sortedArray.sorted(by: { $0.rating > $1.rating })
-        //            self.sortBy = Sort.bestRatingsFirst
-        //        } else if (self.options[5].isChecked) {
-        //            self.sortedArray = self.sortedArray.sorted(by: { $0.rating < $1.rating })
-        //            self.sortBy = Sort.worstRatingsFirst
-        //        }
+        } else if (self.options[2].isChecked) {
+            self.sortedArray = self.sortedArray.sorted(by: { $0.getStartDate() < $1.getStartDate() })
+            self.sortBy = Sort.soonestFirst
+        } else if (self.options[3].isChecked) {
+            self.sortedArray = self.sortedArray.sorted(by: { $0.organization < $1.organization })
+            self.sortBy = Sort.organization
+        }
         tableView.reloadData()
     }
     
@@ -167,6 +167,8 @@ class SearchViewController: UITableViewController, Return {
         makeLabelForRadio(text: "Sort", left: 40)
         makeRadioOption(optionText: "A-Z", left: 40)
         makeRadioOption(optionText: "Z-A", left: 40)
+        makeRadioOption(optionText: "Soonest First", left: 40)
+        makeRadioOption(optionText: "Organization", left: 40)
         initialSort()
         setOptionColors()
     }
@@ -176,6 +178,10 @@ class SearchViewController: UITableViewController, Return {
             options[0].isChecked = true
         } else if (sortBy == Sort.za) {
             options[1].isChecked = true
+        } else if (sortBy == Sort.soonestFirst) {
+            options[2].isChecked = true
+        } else if (sortBy == Sort.organization) {
+            options[3].isChecked = true
         }
     }
     
@@ -252,6 +258,12 @@ class SearchViewController: UITableViewController, Return {
         } else if options.count == 2 {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap2(sender:)))
             label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 3 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap3(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 4 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap4(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
         }
         label.isUserInteractionEnabled = true
     }
@@ -262,6 +274,14 @@ class SearchViewController: UITableViewController, Return {
     
     @objc func handleTap2(sender: UIGestureRecognizer) {
         handleOptionClick(option: options[1])
+    }
+    
+    @objc func handleTap3(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[2])
+    }
+    
+    @objc func handleTap4(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[3])
     }
     
     func handleOptionClick(option: Checkbox) {

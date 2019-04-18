@@ -15,6 +15,7 @@ enum ThemeName {
     case dark
     case seaBlue
     case twilightPurple
+    case augie
 }
 
 class Theme {
@@ -84,6 +85,19 @@ class ThemeManager {
         saveTheme(theme: "purple")
     }
     
+    func augieTheme() {
+        Theme.sharedInstance.theme = ThemeName.augie
+        Theme.sharedInstance.backgroundColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1)
+        Theme.sharedInstance.darkerBackground = UIColor.init(red: 26/255, green: 68/255, blue: 110/255, alpha: 1)
+        Theme.sharedInstance.textColor = UIColor.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
+        Theme.sharedInstance.isDark = true
+        Theme.sharedInstance.checkboxColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1)
+        Theme.sharedInstance.checkboxBackground = .white
+        Theme.sharedInstance.buttonColor = UIColor.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
+        Theme.sharedInstance.lineColor = UIColor.lightGray
+        saveTheme(theme: "augie")
+    }
+    
     func saveTheme(theme: String) {
         let preferences = UserDefaults.standard
         var builder = ""
@@ -93,13 +107,15 @@ class ThemeManager {
     }
     
     func setInitialTheme(theme: String) {
-        if (theme == "white") {
+        if (theme == "augie") {
+            augieTheme()
+        } else if (theme == "white") {
             whiteTheme()
         } else if (theme == "dark") {
             darkTheme()
         } else if (theme == "blue") {
             seaBlueTheme()
-        } else if (theme == "purple"){
+        } else if (theme == "purple") {
             twilightPurpleTheme()
         }
     }

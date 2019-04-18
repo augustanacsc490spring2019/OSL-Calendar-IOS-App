@@ -57,6 +57,7 @@ class SettingsViewController: UIViewController {
     
     func setUpThemeOptions() {
         makeLabel(text: "Theme", left: 20)
+        makeRadioOption(optionText: "Augie", left: 40)
         makeRadioOption(optionText: "White", left: 40)
         makeRadioOption(optionText: "Dark", left: 40)
         makeRadioOption(optionText: "Sea Blue", left: 40)
@@ -79,6 +80,24 @@ class SettingsViewController: UIViewController {
     }
     
     @objc func signOutAction(_ sender: UIButton) {
+        impact.impactOccurred()
+        displaySignOutPopup()
+    }
+    
+    func displaySignOutPopup() {
+        let alertController = UIAlertController(title: "Sign Out?", message: "Are you sure you want to sign out?", preferredStyle: UIAlertController.Style.alert)
+        let addAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (alert) -> Void in
+            self.signOut()
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default) { (action: UIAlertAction!) -> Void in
+            alertController.dismiss(animated: true, completion: nil)
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(addAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func signOut() {
         GIDSignIn.sharedInstance()?.signOut()
         let firebaseAuth = Auth.auth()
         do {
@@ -86,7 +105,7 @@ class SettingsViewController: UIViewController {
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }
-        let googleSignIn = self.storyboard?.instantiateViewController(withIdentifier: "tab") as? GoogleSignInViewController ?? GoogleSignInViewController()
+        let googleSignIn = self.storyboard?.instantiateViewController(withIdentifier: "signIn") as? GoogleSignInViewController ?? GoogleSignInViewController()
         googleSignIn.definesPresentationContext = true
         googleSignIn.modalPresentationStyle = .fullScreen
         self.present(googleSignIn, animated: true, completion: nil)
@@ -145,6 +164,9 @@ class SettingsViewController: UIViewController {
         } else if options.count == 4 {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap4(sender:)))
             label.addGestureRecognizer(gestureRecognizer)
+        } else if options.count == 5 {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap5(sender:)))
+            label.addGestureRecognizer(gestureRecognizer)
         }
         label.isUserInteractionEnabled = true
     }
@@ -165,6 +187,10 @@ class SettingsViewController: UIViewController {
         handleOptionClick(option: options[3])
     }
     
+    @objc func handleTap5(sender: UIGestureRecognizer) {
+        handleOptionClick(option: options[4])
+    }
+    
     @objc func handleOptionClick(option: Checkbox) {
         let index = self.options.firstIndex(of: option) ?? 0
         for option in options {
@@ -177,14 +203,21 @@ class SettingsViewController: UIViewController {
     
     func switchTheme() {
         if (self.options[0].isChecked) {
-            switchToWhiteTheme()
+            switchToAugieTheme()
         } else if (self.options[1].isChecked) {
-            switchToDarkTheme()
+            switchToWhiteTheme()
         } else if (self.options[2].isChecked) {
-            switchToSeaBlueTheme()
+            switchToDarkTheme()
         } else if (self.options[3].isChecked) {
+            switchToSeaBlueTheme()
+        } else if (self.options[4].isChecked) {
             switchToTwilightPurpleTheme()
         }
+    }
+    
+    func switchToAugieTheme() {
+        themeManager.augieTheme()
+        setTheme()
     }
     
     func switchToWhiteTheme() {
@@ -219,10 +252,11 @@ class SettingsViewController: UIViewController {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
         self.setNeedsStatusBarAppearanceUpdate()
         switch theme {
-            case .white: self.options[0].isChecked = true
-            case .dark: self.options[1].isChecked = true
-            case .seaBlue: self.options[2].isChecked = true
-            case .twilightPurple: self.options[3].isChecked = true
+            case .augie: self.options[0].isChecked = true
+            case .white: self.options[1].isChecked = true
+            case .dark: self.options[2].isChecked = true
+            case .seaBlue: self.options[3].isChecked = true
+            case .twilightPurple: self.options[4].isChecked = true
         }
         signOutButton.backgroundColor = Theme.sharedInstance.buttonColor
         setTextColors()
