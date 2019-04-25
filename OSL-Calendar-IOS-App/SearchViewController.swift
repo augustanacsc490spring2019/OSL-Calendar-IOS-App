@@ -31,6 +31,7 @@ class SearchViewController: UITableViewController, Return {
     @IBOutlet weak var sortButton: UIBarButtonItem!
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
+    var filteredEvents: [Event] = []
     var database: DatabaseReference!
     var fixedHeightOfLabel: CGFloat = 45
     var index: Double = 0.6
@@ -39,18 +40,21 @@ class SearchViewController: UITableViewController, Return {
     var sortView = UIView()
     var options: [Checkbox] = []
     var firstSort = true
-    var sortBy: Sort = Sort.az
+    var sortBy: Sort = Sort.soonestFirst
     var eventController = EventViewController()
     var isEvent = false
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.view.isUserInteractionEnabled = false
         self.navigationController?.view.makeToastActivity(.center)
         tableView.register(EventCell.self, forCellReuseIdentifier: "cellIdentifier")
+        definesPresentationContext = true
         getTheme()
         database = Database.database().reference().child("current-events")
         databaseListener()
+        setUpSearchBar()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -58,15 +62,21 @@ class SearchViewController: UITableViewController, Return {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering() {
+            return filteredEvents.count
+        }
         return sortedArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! EventCell
         
-        print("\(#function) --- section = \(indexPath.section), row = \(indexPath.row)")
-        
-        let event = sortedArray[indexPath.row]
+        let event: Event
+        if isFiltering() {
+            event = filteredEvents[indexPath.row]
+        } else {
+            event = sortedArray[indexPath.row]
+        }
         cell.event = event
         
         cell.backgroundColor = UIColor.clear
@@ -82,14 +92,26 @@ class SearchViewController: UITableViewController, Return {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         isEvent = true
-        let event = sortedArray[indexPath.row]
+        let event: Event
+        if isFiltering() {
+            event = filteredEvents[indexPath.row]
+            searchController.dismiss(animated: false) {
+                self.presentEvent(event: event)
+            }
+        } else {
+            event = sortedArray[indexPath.row]
+            presentEvent(event: event)
+        }
+    }
+    
+    func presentEvent(event: Event) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         eventController = self.storyboard?.instantiateViewController(withIdentifier: "event") as? EventViewController ?? EventViewController()
-        self.definesPresentationContext = true
         eventController.delegate = self
         self.eventController.getEvent(event: event)
         let navigationController = UINavigationController(rootViewController: eventController)
         navigationController.modalPresentationStyle = .overCurrentContext
+        navigationController.definesPresentationContext = true
         self.present(navigationController, animated: true, completion: nil)
     }
     
@@ -111,7 +133,7 @@ class SearchViewController: UITableViewController, Return {
     
     @IBAction func sortAction(_ sender: Any) {
         if (self.isDown) {
-            tableView.isScrollEnabled = false
+            tableView.isUserInteractionEnabled = false
             tableView.backgroundColor = Theme.sharedInstance.darkerBackground
             sortView.isHidden = false
             self.view.bringSubviewToFront(sortView)
@@ -123,9 +145,34 @@ class SearchViewController: UITableViewController, Return {
         impact.impactOccurred()
     }
     
+    func setUpSearchBar() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search..."
+        searchController.hidesNavigationBarDuringPresentation = false
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    func searchBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        filteredEvents = sortedArray.filter({( event: Event) -> Bool in
+            let text = searchText.lowercased()
+            return event.name.lowercased().contains(text) || event.location.lowercased().contains(text) || event.organization.lowercased().contains(text) || event.tags.lowercased().contains(text)
+        })
+        tableView.reloadData()
+    }
+    
+    func isFiltering() -> Bool {
+        return !searchBarIsEmpty()
+    }
+    
     func closeSortView() {
         sortView.isHidden = true
-        tableView.isScrollEnabled = true
+        tableView.isUserInteractionEnabled = true
         tableView.backgroundColor = Theme.sharedInstance.backgroundColor
         self.sortButton.image = UIImage(named: "downSort")
         self.isDown = true
@@ -145,6 +192,9 @@ class SearchViewController: UITableViewController, Return {
         } else if (self.options[3].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.organization < $1.organization })
             self.sortBy = Sort.organization
+        }
+        if (isFiltering()){
+            self.filterContentForSearchText(searchController.searchBar.text!)
         }
         tableView.reloadData()
     }
@@ -328,6 +378,14 @@ class SearchViewController: UITableViewController, Return {
         if let theme = preferences.string(forKey: "theme") {
             themeManager.setInitialTheme(theme: theme)
         }
+    }
+    
+}
+
+extension SearchViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
     }
     
 }
