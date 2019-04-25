@@ -16,9 +16,9 @@ import Toast_Swift
 let impact = UIImpactFeedbackGenerator()
 
 enum Sort {
+    case soonestFirst
     case az
     case za
-    case soonestFirst
     case organization
 }
 
@@ -94,24 +94,35 @@ class SearchViewController: UITableViewController, Return {
         isEvent = true
         let event: Event
         if isFiltering() {
+            print("filtered")
             event = filteredEvents[indexPath.row]
-            searchController.dismiss(animated: false) {
-                self.presentEvent(event: event)
+            if (searchController.isActive) {
+                searchController.dismiss(animated: false) {
+                    self.presentEvent(event: event)
+                }
+            } else {
+                presentEvent(event: event)
             }
         } else {
             event = sortedArray[indexPath.row]
-            presentEvent(event: event)
+            if (searchController.isActive) {
+                searchController.dismiss(animated: false) {
+                    self.presentEvent(event: event)
+                }
+            } else {
+                presentEvent(event: event)
+            }
         }
     }
     
     func presentEvent(event: Event) {
+        print("presenting event")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         eventController = self.storyboard?.instantiateViewController(withIdentifier: "event") as? EventViewController ?? EventViewController()
         eventController.delegate = self
         self.eventController.getEvent(event: event)
         let navigationController = UINavigationController(rootViewController: eventController)
         navigationController.modalPresentationStyle = .overCurrentContext
-        navigationController.definesPresentationContext = true
         self.present(navigationController, animated: true, completion: nil)
     }
     
@@ -181,14 +192,14 @@ class SearchViewController: UITableViewController, Return {
     
     func sortArray() {
         if (self.options[0].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.name < $1.name })
-            self.sortBy = Sort.az
-        } else if (self.options[1].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.name > $1.name })
-            self.sortBy = Sort.za
-        } else if (self.options[2].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.getStartDate() < $1.getStartDate() })
             self.sortBy = Sort.soonestFirst
+        } else if (self.options[1].isChecked) {
+            self.sortedArray = self.sortedArray.sorted(by: { $0.name < $1.name })
+            self.sortBy = Sort.az
+        } else if (self.options[2].isChecked) {
+            self.sortedArray = self.sortedArray.sorted(by: { $0.name > $1.name })
+            self.sortBy = Sort.za
         } else if (self.options[3].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.organization < $1.organization })
             self.sortBy = Sort.organization
@@ -215,20 +226,20 @@ class SearchViewController: UITableViewController, Return {
         sortView.rightAnchor.constraint(equalTo: (self.navigationController?.view.rightAnchor)!, constant: -20).isActive = true
         sortView.bottomAnchor.constraint(equalTo: (self.navigationController?.view.safeAreaLayoutGuide.bottomAnchor)!, constant: -20).isActive = true
         makeLabelForRadio(text: "Sort", left: 40)
+        makeRadioOption(optionText: "Soonest First", left: 40)
         makeRadioOption(optionText: "A-Z", left: 40)
         makeRadioOption(optionText: "Z-A", left: 40)
-        makeRadioOption(optionText: "Soonest First", left: 40)
         makeRadioOption(optionText: "Organization", left: 40)
         initialSort()
         setOptionColors()
     }
     
     func initialSort() {
-        if (sortBy == Sort.az) {
+        if (sortBy == Sort.soonestFirst) {
             options[0].isChecked = true
-        } else if (sortBy == Sort.za) {
+        } else if (sortBy == Sort.az) {
             options[1].isChecked = true
-        } else if (sortBy == Sort.soonestFirst) {
+        } else if (sortBy == Sort.za) {
             options[2].isChecked = true
         } else if (sortBy == Sort.organization) {
             options[3].isChecked = true

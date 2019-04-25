@@ -48,6 +48,9 @@ class EventViewController: UIViewController, DisplayEvent {
             }
             if let details = event?.getDescription() {
                 descriptionLabel.text = "\(details)"
+                if (details == "") {
+                    descriptionLabel.text = "No Description Available"
+                }
             }
         }
     }
