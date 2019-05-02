@@ -26,7 +26,7 @@ protocol DisplayEvent {
     func getEvent(event: Event)
 }
 
-class SearchViewController: UITableViewController, Return {
+class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
     
     @IBOutlet weak var sortButton: UIBarButtonItem!
     let themeManager = ThemeManager()
@@ -144,6 +144,7 @@ class SearchViewController: UITableViewController, Return {
     
     @IBAction func sortAction(_ sender: Any) {
         if (self.isDown) {
+            searchController.searchBar.isUserInteractionEnabled = false
             tableView.isUserInteractionEnabled = false
             tableView.backgroundColor = Theme.sharedInstance.darkerBackground
             sortView.isHidden = false
@@ -163,6 +164,7 @@ class SearchViewController: UITableViewController, Return {
         searchController.hidesNavigationBarDuringPresentation = false
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.searchBar.delegate = self
     }
     
     func searchBarIsEmpty() -> Bool {
@@ -181,8 +183,15 @@ class SearchViewController: UITableViewController, Return {
         return !searchBarIsEmpty()
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.setShowsCancelButton(false, animated: true)
+        filterContentForSearchText("")
+    }
+    
     func closeSortView() {
         sortView.isHidden = true
+        searchController.searchBar.isUserInteractionEnabled = true
         tableView.isUserInteractionEnabled = true
         tableView.backgroundColor = Theme.sharedInstance.backgroundColor
         self.sortButton.image = UIImage(named: "downSort")
@@ -220,7 +229,7 @@ class SearchViewController: UITableViewController, Return {
         self.navigationController?.view.addSubview(sortView)
         sortView.layer.borderWidth = 0.5
         sortView.layer.borderColor = UIColor.lightGray.cgColor
-        let top = 20 + UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.size.height ?? 0)
+        let top = 0 + UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.size.height ?? 0)
         sortView.topAnchor.constraint(equalTo: (self.navigationController?.view.topAnchor)!, constant: top).isActive = true
         sortView.leftAnchor.constraint(equalTo: (self.navigationController?.view.leftAnchor)!, constant: 20).isActive = true
         sortView.rightAnchor.constraint(equalTo: (self.navigationController?.view.rightAnchor)!, constant: -20).isActive = true

@@ -10,6 +10,8 @@
 import Foundation
 import UIKit
 import AVFoundation
+import GoogleSignIn
+import FirebaseAuth
 
 class QRScannerController: UIViewController {
    
@@ -85,7 +87,7 @@ class QRScannerController: UIViewController {
             self.view.layer.addSublayer(self.videoPreviewLayer!)
         
             // Start video capture.
-            self.captureSession.startRunning()
+            // self.captureSession.startRunning()
         
             // Move the message label and top bar to the front
 //          view.bringSubviewToFront(messageLabel)
@@ -103,13 +105,13 @@ class QRScannerController: UIViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.captureSession.stopRunning()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.captureSession.startRunning()
     }
     
@@ -126,9 +128,8 @@ class QRScannerController: UIViewController {
             return
         }
         
-        let alertPrompt = UIAlertController(title: "Open App", message: "You're going to open \(decodedURL)", preferredStyle: .actionSheet)
+        let alertPrompt = UIAlertController(title: "Open URL", message: "Check in to the event? You will be redirected to a URL.", preferredStyle: .actionSheet)
         let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (action) -> Void in
-            
             if let url = URL(string: decodedURL) {
                 if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
