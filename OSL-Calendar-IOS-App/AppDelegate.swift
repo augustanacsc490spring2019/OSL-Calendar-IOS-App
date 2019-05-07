@@ -18,10 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Configure Firebase and Google Sign in
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
+        // If user is signed in, continue to the tab view
         Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 email = user.email!
@@ -65,12 +66,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 print(err)
                 return
             }
-            
-            // Successful Firebase authentication
-            // Triggers state did change listener
         })
     }
     
+    // Initialize the tab view controller with the find events page showing
     func continueToTabView() {
         let mainStoryboardIpad : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let initialViewControlleripad : UIViewController = mainStoryboardIpad.instantiateViewController(withIdentifier: "tab") as UIViewController
@@ -79,6 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         self.window?.makeKeyAndVisible()
     }
     
+    // Sign the user out of Google and Firebase
     func signOut() {
         GIDSignIn.sharedInstance().signOut()
         let firebaseAuth = Auth.auth()

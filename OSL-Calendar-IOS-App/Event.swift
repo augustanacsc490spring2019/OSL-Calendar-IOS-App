@@ -38,17 +38,22 @@ class Event {
     }
     
     func setImage(completion: @escaping (Bool)->() ) {
-        let storage = Storage.storage().reference()
-        let picture = storage.child("Images").child("\(self.imgid).jpg")
-        picture.getData(maxSize: Int64.max) { data, error in
-            if let error = error {
-                print(error)
-                completion(false)
-            } else {
-                if let image = UIImage(data: data!) {
-                    self.image = image
+        if (self.imgid == "default") {
+            self.image = UIImage(named: "default")!
+            completion(true)
+        } else {
+            let storage = Storage.storage().reference()
+            let picture = storage.child("Images").child("\(self.imgid).jpg")
+            picture.getData(maxSize: Int64.max) { data, error in
+                if let error = error {
+                    print(error)
+                    completion(false)
+                } else {
+                    if let image = UIImage(data: data!) {
+                        self.image = image
+                    }
+                    completion(true)
                 }
-                completion(true)
             }
         }
     }

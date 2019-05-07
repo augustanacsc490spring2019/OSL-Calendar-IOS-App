@@ -14,6 +14,7 @@ import SpriteKit
 
 class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
+    // Image view of sign in page
     private let icon : UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "augieIcon"))
         imgView.contentMode = .scaleAspectFit
@@ -21,6 +22,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         return imgView
     }()
     
+    // Title of sign in page
     let titleLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -41,6 +43,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         addGoogleBtn()
     }
     
+    // Anchor and add the title to the sign in page
     func addTitle() {
         self.view.addSubview(titleLabel)
         let margins = self.view.safeAreaLayoutGuide
@@ -54,6 +57,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         titleLabel.textColor = UIColor.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
     }
     
+    // Anchor and add the icon to the sign in page
     func addIcon() {
         self.view.addSubview(icon)
         if let cgImage = icon.image?.cgImage {

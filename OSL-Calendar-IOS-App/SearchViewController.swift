@@ -13,8 +13,10 @@ import Firebase
 import SimpleCheckbox
 import Toast_Swift
 
+// Impact generator for haptic feedback
 let impact = UIImpactFeedbackGenerator()
 
+// Enum for the different sort cases
 enum Sort {
     case soonestFirst
     case az
@@ -22,6 +24,7 @@ enum Sort {
     case organization
 }
 
+// Protocol for getting the event in the detailed event view controller
 protocol DisplayEvent {
     func getEvent(event: Event)
 }
@@ -57,10 +60,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         setUpSearchBar()
     }
     
+    // Number of sections in the table
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
+    // Number of rows in the table, changes if filtering is active
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering() {
             return filteredEvents.count
@@ -68,6 +73,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         return sortedArray.count
     }
     
+    // Construct the table cells, different when filtering is active
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! EventCell
         
@@ -90,6 +96,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         return cell
     }
     
+    // Action for clicking a row in the table view
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         isEvent = true
         let event: Event
@@ -115,6 +122,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         }
     }
     
+    // Present detailed event view controller
     func presentEvent(event: Event) {
         print("presenting event")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -126,6 +134,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         self.present(navigationController, animated: true, completion: nil)
     }
     
+    // View will appear, pass to detailed event view when it is presented
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("View Will Appear: Search")
@@ -133,8 +142,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
             eventController.viewWillAppear(animated)
         }
         setTheme()
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
+    // View did appear, hide search bar when scrolling
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationItem.hidesSearchBarWhenScrolling = true
+    }
+    
+    // Method called when returning from detailed event view
     func returnFromEventView() {
         isEvent = false
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -142,6 +159,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         tableView.reloadData()
     }
     
+    // Action for clicking the sort button, toggle the sort menu
     @IBAction func sortAction(_ sender: Any) {
         if (self.isDown) {
             searchController.searchBar.isUserInteractionEnabled = false
@@ -157,20 +175,22 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         impact.impactOccurred()
     }
     
+    // Set up the search bar
     func setUpSearchBar() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search..."
         searchController.hidesNavigationBarDuringPresentation = false
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
         searchController.searchBar.delegate = self
     }
     
+    // Returns true when the search bar is empty
     func searchBarIsEmpty() -> Bool {
         return searchController.searchBar.text?.isEmpty ?? true
     }
     
+    // Filter the search bar content on name, location, organization, and tags
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         filteredEvents = sortedArray.filter({( event: Event) -> Bool in
             let text = searchText.lowercased()
@@ -179,16 +199,19 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         tableView.reloadData()
     }
     
+    // Returns true filtering is active
     func isFiltering() -> Bool {
         return !searchBarIsEmpty()
     }
     
+    // Action for pressing the cancel button in the search bar
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.setShowsCancelButton(false, animated: true)
         filterContentForSearchText("")
     }
     
+    // Close sort view
     func closeSortView() {
         sortView.isHidden = true
         searchController.searchBar.isUserInteractionEnabled = true
@@ -199,6 +222,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         sortArray()
     }
     
+    // Sort the table based on the selected sort type
     func sortArray() {
         if (self.options[0].isChecked) {
             self.sortedArray = self.sortedArray.sorted(by: { $0.getStartDate() < $1.getStartDate() })
@@ -219,6 +243,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         tableView.reloadData()
     }
     
+    // Set up the sort view to be displayed when hitting the sort button
     func setUpSortView() {
         index = 0.6
         options = []
@@ -238,11 +263,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         makeRadioOption(optionText: "Soonest First", left: 40)
         makeRadioOption(optionText: "A-Z", left: 40)
         makeRadioOption(optionText: "Z-A", left: 40)
-        makeRadioOption(optionText: "Organization", left: 40)
+        makeRadioOption(optionText: "Group", left: 40)
         initialSort()
         setOptionColors()
     }
     
+    // Initial sort when first loading the app
     func initialSort() {
         if (sortBy == Sort.soonestFirst) {
             options[0].isChecked = true
@@ -255,6 +281,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         }
     }
     
+    // Creates a label for a radio button
     func makeLabelForRadio(text: String, left: CGFloat) -> UILabel {
         let label = CustomLabel()
         label.text = text
@@ -269,6 +296,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         return label
     }
     
+    // Creates a checkbox
     func makeOption(optionText: String, left: CGFloat) -> Checkbox {
         let option = Checkbox()
         option.translatesAutoresizingMaskIntoConstraints=false
@@ -284,6 +312,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         return option
     }
     
+    // Creates a radio option
     func makeRadioOption(optionText: String, left: CGFloat) {
         let option = makeOption(optionText: optionText, left: left)
         option.borderStyle = .circle
@@ -294,6 +323,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         }
     }
     
+    // Listener for the current events in the database
     func databaseListener() {
         self.setTheme()
         self.setUpSortView()
@@ -321,6 +351,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         })
     }
     
+    // Add gestures to the sort radio option labels
     func createGestures(label: UILabel) {
         if options.count == 1 {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap1(sender:)))
@@ -354,6 +385,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         handleOptionClick(option: options[3])
     }
     
+    // Action for handling when a sort option is clicked
     func handleOptionClick(option: Checkbox) {
         let index = self.options.firstIndex(of: option) ?? 0
         for option in options {
@@ -364,6 +396,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         impact.impactOccurred()
     }
     
+    // Sets the theme of the view controller
     func setTheme() {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
         tableView.backgroundColor = Theme.sharedInstance.backgroundColor
@@ -377,12 +410,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         tableView.reloadData()
     }
     
+    // Sets the text colors of the view controller
     func setTextColors() {
         for label in labels {
             label.textColor = Theme.sharedInstance.textColor
         }
     }
     
+    // Sets the radio option colors of the sort view
     func setOptionColors() {
         for option in options {
             option.checkboxBackgroundColor = Theme.sharedInstance.checkboxBackground
@@ -393,6 +428,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         }
     }
     
+    // Gets the initial theme saved to the device
     func getTheme() {
         let preferences = UserDefaults.standard
         if let theme = preferences.string(forKey: "theme") {
@@ -402,6 +438,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
     
 }
 
+// Extension for filtering using the search bar
 extension SearchViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {

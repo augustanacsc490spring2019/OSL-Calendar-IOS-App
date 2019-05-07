@@ -38,16 +38,6 @@ class QRScannerController: UIViewController {
         super.viewDidLoad()
         self.view.makeToastActivity(.center)
         DispatchQueue.main.async {
-        
-//        self.view.addSubview(messageLabel)
-//
-//        messageLabel.text = "No QR code is detected"
-//        messageLabel.backgroundColor = .white
-//        messageLabel.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 100)
-//        messageLabel.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor)
-//        messageLabel.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
-//        messageLabel.heightAnchor.constraint(equalToConstant: 40)
-        
         // Get the back-facing camera for capturing videos
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera],   mediaType: AVMediaType.video, position: .back)
         
@@ -70,7 +60,6 @@ class QRScannerController: UIViewController {
                 // Set delegate and use the default dispatch queue to execute the call back
                 captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
                 captureMetadataOutput.metadataObjectTypes = self.supportedCodeTypes
-                //            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
             
             } catch {
                 // If any error occurs, simply print it out and don't continue any more.
@@ -85,12 +74,6 @@ class QRScannerController: UIViewController {
             self.videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             self.videoPreviewLayer?.frame = self.view.layer.bounds
             self.view.layer.addSublayer(self.videoPreviewLayer!)
-        
-            // Start video capture.
-            // self.captureSession.startRunning()
-        
-            // Move the message label and top bar to the front
-//          view.bringSubviewToFront(messageLabel)
         
             // Initialize QR Code Frame to highlight the QR code
             self.qrCodeFrameView = UIView()
@@ -128,7 +111,7 @@ class QRScannerController: UIViewController {
             return
         }
         
-        let alertPrompt = UIAlertController(title: "Open URL", message: "Check in to the event? You will be redirected to a URL.", preferredStyle: .actionSheet)
+        let alertPrompt = UIAlertController(title: "Open URL", message: "Check into the event? You will be redirected to a URL.", preferredStyle: .actionSheet)
         let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (action) -> Void in
             if let url = URL(string: decodedURL) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -153,7 +136,6 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRect.zero
-//            messageLabel.text = "No QR code is detected"
             return
         }
         
@@ -167,7 +149,6 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             
             if metadataObj.stringValue != nil {
                 launchApp(decodedURL: metadataObj.stringValue!)
-//                messageLabel.text = metadataObj.stringValue
             }
         }
     }

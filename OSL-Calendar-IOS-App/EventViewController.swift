@@ -12,12 +12,15 @@ import Foundation
 import UIKit
 import EventKit
 
+// Global dispatch group for loading events and getting images in search view controller
 var group = DispatchGroup()
 
+// Protocol for returning to the search view controller
 protocol Return {
     func returnFromEventView()
 }
 
+// Makes a label with the given text and font
 func makeLabel(text: String, font: UIFont) -> UILabel {
     let lbl = UILabel()
     lbl.textColor = .black
@@ -30,6 +33,7 @@ func makeLabel(text: String, font: UIFont) -> UILabel {
 
 class EventViewController: UIViewController, DisplayEvent {
     
+    // Event object, set the image, name and other labels to the attributes of the event object
     var event : Event? {
         didSet {
             eventImage.image = event?.image
@@ -55,6 +59,7 @@ class EventViewController: UIViewController, DisplayEvent {
         }
     }
     
+    // Name label for the detailed event view
     let eventNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -64,18 +69,21 @@ class EventViewController: UIViewController, DisplayEvent {
         return lbl
     }()
     
+    // Title labels for the different attributes
     let locationTitle = makeLabel(text: "Location:", font: UIFont.boldSystemFont(ofSize: 18))
     let dateTitle = makeLabel(text: "Date:", font: UIFont.boldSystemFont(ofSize: 18))
     let timeTitle = makeLabel(text: "Time:", font: UIFont.boldSystemFont(ofSize: 18))
-    let organizationTitle = makeLabel(text: "Organization:", font: UIFont.boldSystemFont(ofSize: 18))
+    let organizationTitle = makeLabel(text: "Group:", font: UIFont.boldSystemFont(ofSize: 18))
     let descriptionTitle = makeLabel(text: "Description:", font: UIFont.boldSystemFont(ofSize: 18))
     
+    // Labels for the different event attributes
     let locationLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let dateLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let timeLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let organizationLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let descriptionLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     
+    // Image view for the event object's image
     private let eventImage : UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "augieIcon"))
         imgView.contentMode = .scaleAspectFit
@@ -83,6 +91,7 @@ class EventViewController: UIViewController, DisplayEvent {
         return imgView
     }()
     
+    // Button for adding the event to the calendar
     private let calendarButton : UIButton = {
         let btn = UIButton()
         btn.contentMode = .scaleAspectFit
@@ -97,21 +106,25 @@ class EventViewController: UIViewController, DisplayEvent {
     var scrollView = UIScrollView()
     var containerView = UIView()
     
+    // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
+    // View will appear - set theme, check if in calendar
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTheme()
         checkEventInCalendar()
     }
     
+    // Returns back to the search view controller
     @IBAction func backAction(_ sender: Any) {
         self.delegate?.returnFromEventView()
         self.dismiss(animated: true, completion: nil)
     }
     
+    // Set up the scroll view
     func setUpScrollView() {
         let margins = self.view.safeAreaLayoutGuide
         containerView = UIView()
@@ -131,6 +144,7 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
     }
     
+    // Checks if the current event is already in the calendar
     func checkEventInCalendar() {
         let eventStore = EKEventStore()
         var isExistingEvent = false
@@ -172,6 +186,7 @@ class EventViewController: UIViewController, DisplayEvent {
         }
     }
     
+    // Action for when the calendar button is tapped
     @objc func calendarAction() {
         impact.impactOccurred()
         let eventStore = EKEventStore()
@@ -208,6 +223,7 @@ class EventViewController: UIViewController, DisplayEvent {
     let line1 = UILabel()
     let line2 = UILabel()
     
+    // Method called when moving to this event view controller - sets up all of the view
     func getEvent(event: Event) {
         self.event = event
         setUpScrollView()
@@ -251,12 +267,14 @@ class EventViewController: UIViewController, DisplayEvent {
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
     }
     
+    // Anchors a title label to the left of a description label and anchors them to the bottom of the previous description label
     func anchorField(titleLabel: UIView, descriptionLabel: UIView, lastDescriptionLabel: UIView, paddingTop: CGFloat) {
         titleLabel.anchor(top: lastDescriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: paddingTop, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         descriptionLabel.anchor(top: lastDescriptionLabel.bottomAnchor, left: nil, bottom: nil, right: containerView.rightAnchor, paddingTop: paddingTop, paddingLeft: 20, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         descriptionLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 150).isActive = true
     }
     
+    // Sets the theme of the view
     func setTheme() {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
         eventNameLabel.textColor = Theme.sharedInstance.textColor
