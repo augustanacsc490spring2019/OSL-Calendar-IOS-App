@@ -435,6 +435,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         let preferences = UserDefaults.standard
         if let theme = preferences.string(forKey: "theme") {
             themeManager.setInitialTheme(theme: theme)
+        } else {
+            themeManager.setInitialTheme(theme: "augie")
         }
     }
     

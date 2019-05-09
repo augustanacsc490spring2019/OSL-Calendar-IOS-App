@@ -17,7 +17,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
     // Image view of sign in page
     private let icon : UIImageView = {
-        let imgView = UIImageView(image: UIImage(named: "augieIcon"))
+        let imgView = UIImageView(image: UIImage(named: "augieMedal"))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
@@ -37,7 +37,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1)
+        //view.backgroundColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1)
         GIDSignIn.sharedInstance().uiDelegate = self
         addTitle()
         addIcon()
@@ -55,7 +55,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         }
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.font = customFont
-        titleLabel.textColor = UIColor.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
+        titleLabel.textColor = UIColor.init(red: 32/255, green: 85/255, blue: 138/255, alpha: 1) //.init(red: 255/255, green: 221/255, blue: 0/255, alpha: 1)
     }
     
     // Anchor and add the icon to the sign in page

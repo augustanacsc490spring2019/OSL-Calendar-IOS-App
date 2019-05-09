@@ -19,6 +19,7 @@
 		762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */; };
 		762108F8224C711900E13A3E /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762108F7224C711900E13A3E /* EventViewController.swift */; };
 		762421F2225FB8B100753C20 /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762421F1225FB8B100753C20 /* CustomLabel.swift */; };
+		7629495722849E840005957E /* RCValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629495622849E840005957E /* RCValues.swift */; };
 		762E007C2268F66B00076452 /* animo_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 762E007B2268F66B00076452 /* animo_light.ttf */; };
 		763344E1225684D400FF4802 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763344E0225684D400FF4802 /* EventCell.swift */; };
 		763344E3225685F800FF4802 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763344E2225685F800FF4802 /* Extension.swift */; };
@@ -66,6 +67,7 @@
 		762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInViewController.swift; sourceTree = "<group>"; };
 		762108F7224C711900E13A3E /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		762421F1225FB8B100753C20 /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
+		7629495622849E840005957E /* RCValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RCValues.swift; sourceTree = "<group>"; };
 		762E007B2268F66B00076452 /* animo_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = animo_light.ttf; sourceTree = "<group>"; };
 		763344E0225684D400FF4802 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		763344E2225685F800FF4802 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				763344E0225684D400FF4802 /* EventCell.swift */,
 				763344E2225685F800FF4802 /* Extension.swift */,
 				762421F1225FB8B100753C20 /* CustomLabel.swift */,
+				7629495622849E840005957E /* RCValues.swift */,
 			);
 			path = "OSL-Calendar-IOS-App";
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SimpleCheckbox/SimpleCheckbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -364,6 +368,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SimpleCheckbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -471,6 +476,7 @@
 			files = (
 				762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */,
 				763344E1225684D400FF4802 /* EventCell.swift in Sources */,
+				7629495722849E840005957E /* RCValues.swift in Sources */,
 				762421F2225FB8B100753C20 /* CustomLabel.swift in Sources */,
 				7669234C224A800500145FBE /* SearchViewController.swift in Sources */,
 				761D1BCD224A7C5400D79E34 /* AppDelegate.swift in Sources */,

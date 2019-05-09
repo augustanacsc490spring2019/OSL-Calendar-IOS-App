@@ -66,7 +66,7 @@ class QRScannerController: UIViewController {
             } catch {
                 // If any error occurs, simply print it out and don't continue any more.
                 self.view.hideToastActivity()
-                self.view.makeToast("Unable to access camera, make sure permissions are allowed in Settings", position: .center)
+                self.displayPopUp()
                 print(error)
                 return
             }
@@ -88,6 +88,16 @@ class QRScannerController: UIViewController {
             }
             self.view.hideToastActivity()
         }
+    }
+    
+    // Displays a pop up telling the user the camera permissions are not enabled
+    func displayPopUp() {
+        let alertController = UIAlertController(title: "Camera Permission", message: "Unable to access camera, make sure permissions are allowed in Settings", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (alert) -> Void in
+            alertController.dismiss(animated: true, completion: nil)
+        })
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     override func viewDidDisappear(_ animated: Bool) {

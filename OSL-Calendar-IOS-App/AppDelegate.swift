@@ -16,8 +16,10 @@ var email: String = ""
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
+    var needUpdate: Bool = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let _ = RCValues.sharedInstance
         // Configure Firebase and Google Sign in
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
@@ -91,6 +93,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         self.window?.rootViewController?.view.isUserInteractionEnabled = true
         self.window?.makeToast("Must login with Augustana email!", position: .center)
     }
+    
+    // Called once the remote config successfully loaded the RC values
+    func triggerFetched() {
+        let updateRequired = RemoteConfig.remoteConfig().configValue(forKey: "force_update_required").boolValue
+        if (updateRequired) {
+            let cloudVersion = RemoteConfig.remoteConfig()
+                .configValue(forKey: "force_update_version_ios")
+                .stringValue?
+                .replacingOccurrences(of: ".", with: "")
+            let currentVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+            let cloudNum: Int = Int(cloudVersion!)! // firstText is UITextField
+            let currentNum: Int = Int(currentVersion.replacingOccurrences(of: ".", with: ""))!
+            if (currentNum < cloudNum) {
+                self.window?.rootViewController?.view.isUserInteractionEnabled = false
+                updateAlert()
+                needUpdate = true
+            }
+        }
+    }
+    
+    // Displays an update alert to the user
+    func updateAlert() {
+        let alert = UIAlertController(title: "New Version Available", message: "Please update the app to the newest version.", preferredStyle: UIAlertController.Style.alert)
+        let update = UIAlertAction(title: "Update", style: UIAlertAction.Style.default, handler: { action in
+            let link = "https://itunes.apple.com/us/app/aces-augustana-college/id1437441626?ls=1&mt=8"
+            if let url = URL(string: link), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: {(success: Bool) in
+                    if success {
+                        print("Launch successful")
+                    }
+                })
+            }
+        })
+        alert.addAction(update)
+        DispatchQueue.main.async(execute: {
+            self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+        })
+    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -104,6 +144,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        if (needUpdate) {
+            self.window?.rootViewController?.view.isUserInteractionEnabled = false
+            updateAlert()
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
