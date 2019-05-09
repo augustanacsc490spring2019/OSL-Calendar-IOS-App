@@ -5,6 +5,7 @@
 //  Created by Kyle Workman on 3/26/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The view for the settings tab in the application
 
 import Foundation
 import UIKit
@@ -23,6 +24,7 @@ class SettingsViewController: UIViewController {
     var options: [Checkbox] = []
     var signOutButton: UIButton = UIButton()
     
+    // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpScrollView()
@@ -31,11 +33,13 @@ class SettingsViewController: UIViewController {
         setTheme()
     }
     
+    // View will appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("View Will Appear: Settings")
     }
     
+    // Sets up the scroll view for the settings page
     func setUpScrollView() {
         let margins = self.view.safeAreaLayoutGuide
         containerView = UIView()
@@ -55,6 +59,7 @@ class SettingsViewController: UIViewController {
         scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
     }
     
+    // Creates the radio buttons for the different theme options
     func setUpThemeOptions() {
         makeLabel(text: "Theme", left: 20)
         makeRadioOption(optionText: "Augie", left: 40)
@@ -64,6 +69,7 @@ class SettingsViewController: UIViewController {
         makeRadioOption(optionText: "Twighlight Purple", left: 40)
     }
     
+    // Creates the sign out button
     func addSignOutButton() {
         signOutButton = UIButton()
         signOutButton.setTitle("Sign Out", for: .normal)
@@ -79,11 +85,13 @@ class SettingsViewController: UIViewController {
         signOutButton.addTarget(self, action: #selector(signOutAction(_:)), for: .touchUpInside)
     }
     
+    // Action for the sign out button
     @objc func signOutAction(_ sender: UIButton) {
         impact.impactOccurred()
         displaySignOutPopup()
     }
     
+    // Displays a pop up asking if the user would really like to sign out
     func displaySignOutPopup() {
         let alertController = UIAlertController(title: "Sign Out?", message: "Are you sure you want to sign out?", preferredStyle: UIAlertController.Style.alert)
         let addAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (alert) -> Void in
@@ -97,6 +105,7 @@ class SettingsViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    // Signs the current user out of Google and Firebase
     func signOut() {
         GIDSignIn.sharedInstance()?.signOut()
         let firebaseAuth = Auth.auth()
@@ -111,6 +120,7 @@ class SettingsViewController: UIViewController {
         self.present(googleSignIn, animated: true, completion: nil)
     }
     
+    // Creates a label with the given text and anchors it with the given left margin
     func makeLabel(text: String, left: CGFloat) -> UILabel {
         let label = CustomLabel()
         label.text = text
@@ -125,6 +135,7 @@ class SettingsViewController: UIViewController {
         return label
     }
     
+    // Creates a Checkbox option with the given text and achors it with the given left margin
     func makeOption(optionText: String, left: CGFloat) -> Checkbox {
         let option = Checkbox()
         option.translatesAutoresizingMaskIntoConstraints=false
@@ -140,6 +151,7 @@ class SettingsViewController: UIViewController {
         return option
     }
     
+    // Creates a radio option with the given text and anchors it with the given left margin
     func makeRadioOption(optionText: String, left: CGFloat) {
         let option = makeOption(optionText: optionText, left: left)
         option.borderStyle = .circle
@@ -151,6 +163,7 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    // Create gestures for the radio button labels so that they can be tapped as well
     func createGestures(label: UILabel) {
         if options.count == 1 {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap1(sender:)))
@@ -191,6 +204,7 @@ class SettingsViewController: UIViewController {
         handleOptionClick(option: options[4])
     }
     
+    // Action for when a radio option is clicked
     @objc func handleOptionClick(option: Checkbox) {
         let index = self.options.firstIndex(of: option) ?? 0
         for option in options {
@@ -201,6 +215,7 @@ class SettingsViewController: UIViewController {
         impact.impactOccurred()
     }
     
+    // Switches the overall app theme when a different option is selected
     func switchTheme() {
         if (self.options[0].isChecked) {
             switchToAugieTheme()
@@ -215,31 +230,37 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    // Switches the app to Augie theme
     func switchToAugieTheme() {
         themeManager.augieTheme()
         setTheme()
     }
     
+    // Switches the app to the white theme
     func switchToWhiteTheme() {
         themeManager.whiteTheme()
         setTheme()
     }
     
+    // Switches the app to the dark theme
     func switchToDarkTheme() {
         themeManager.darkTheme()
         setTheme()
     }
     
+    // Switches the app to the sea blue theme
     func switchToSeaBlueTheme() {
         themeManager.seaBlueTheme()
         setTheme()
     }
     
+    // Switches the app to the twilight purple theme
     func switchToTwilightPurpleTheme() {
         themeManager.twilightPurpleTheme()
         setTheme()
     }
     
+    // Method for changing the preferred status bar style
     override var preferredStatusBarStyle : UIStatusBarStyle {
         if (Theme.sharedInstance.isDark) {
             return .lightContent
@@ -247,6 +268,7 @@ class SettingsViewController: UIViewController {
         return .default
     }
     
+    // Sets the theme of the setting view and changes appropriate colors
     func setTheme() {
         let theme = Theme.sharedInstance.theme
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
@@ -263,12 +285,14 @@ class SettingsViewController: UIViewController {
         setOptionColors()
     }
     
+    // Sets the text colors of the view controller
     func setTextColors() {
         for label in labels {
             label.textColor = Theme.sharedInstance.textColor
         }
     }
     
+    // Sets the radio option colors
     func setOptionColors() {
         for option in options {
             option.checkboxBackgroundColor = Theme.sharedInstance.checkboxBackground

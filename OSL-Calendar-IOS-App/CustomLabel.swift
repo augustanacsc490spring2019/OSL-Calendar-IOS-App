@@ -5,6 +5,7 @@
 //  Created by Kyle Workman on 4/11/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  Custom label for giving a bigger touch area to labels for radio buttons
 
 import Foundation
 import UIKit

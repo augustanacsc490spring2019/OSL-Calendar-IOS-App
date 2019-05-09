@@ -5,6 +5,9 @@
 //  Created by Kyle Workman on 3/31/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  Extension for easier anchoring across the application
+//
+//  https://stackoverflow.com/questions/46422896/how-to-integrate-safeareainsets-to-current-constraints-extension
 
 import Foundation
 import UIKit

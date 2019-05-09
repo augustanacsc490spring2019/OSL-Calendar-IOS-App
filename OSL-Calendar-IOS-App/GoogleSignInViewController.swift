@@ -5,6 +5,7 @@
 //  Created by Kyle Workman on 3/27/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The Google sign in page for the application
 
 import Foundation
 import UIKit

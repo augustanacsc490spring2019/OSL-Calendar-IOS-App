@@ -5,6 +5,8 @@
 //  Created by Kyle Workman on 3/27/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The detailed event view for the application
+//
 //  https://stackoverflow.com/questions/28379603/how-to-add-an-event-in-the-device-calendar-using-swift
 //  https://stackoverflow.com/questions/39132741/how-can-i-check-if-event-exist-on-calendar
 

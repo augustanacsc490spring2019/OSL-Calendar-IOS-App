@@ -5,6 +5,8 @@
 //  Created by Kyle Workman on 3/26/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The find events/search tab for the application, takes you to the event view controller when an event is tapped
+//
 //  https://www.natashatherobot.com/custom-uitableviewcell-selection-style-color/
 
 import Foundation

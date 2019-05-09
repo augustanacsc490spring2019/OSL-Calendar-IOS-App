@@ -5,6 +5,8 @@
 //  Created by Kyle Workman on 4/4/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  Custom table cell for displaying the events in the search view controller
+//
 //  Custom Cells: https://medium.com/@kemalekren/swift-create-custom-tableview-cell-with-programmatically-in-ios-835d3880513d
 
 import Foundation
@@ -12,6 +14,7 @@ import UIKit
 
 class EventCell : UITableViewCell {
     
+    // Set the different attributes of the cell based on the event object
     var event : Event? {
         didSet {
             eventImage.image = event?.image
@@ -33,6 +36,7 @@ class EventCell : UITableViewCell {
         }
     }
     
+    // Label for the name of the event
     let eventNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -41,7 +45,7 @@ class EventCell : UITableViewCell {
         return lbl
     }()
     
-    
+    // Description label for the location, date, time, and organization of the event
     let eventDescriptionLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -51,6 +55,7 @@ class EventCell : UITableViewCell {
         return lbl
     }()
     
+    // Image view for the event image
     private let eventImage : UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "augieIcon"))
         imgView.contentMode = .scaleAspectFit
@@ -58,6 +63,7 @@ class EventCell : UITableViewCell {
         return imgView
     }()
     
+    // Constructor - add and anchor the different views
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(eventImage)
@@ -74,20 +80,6 @@ class EventCell : UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func convertPriceToDols(price: Int) -> String {
-        if (price == 1) {
-            return "$"
-        } else if (price == 2) {
-            return "$$"
-        } else if (price == 3) {
-            return "$$$"
-        } else if (price == 4) {
-            return "$$$$"
-        } else {
-            return "?"
-        }
     }
     
 }

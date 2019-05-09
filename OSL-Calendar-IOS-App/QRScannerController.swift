@@ -5,6 +5,8 @@
 //  Created by Kyle Workman on 3/27/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The QR view/scanner tab for the application
+//
 //  https://github.com/appcoda/QRCodeReader
 
 import Foundation

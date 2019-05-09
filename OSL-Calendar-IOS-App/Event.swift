@@ -5,6 +5,7 @@
 //  Created by Kyle Workman on 3/26/19.
 //  Copyright © 2019 Kyle Workman. All rights reserved.
 //
+//  The event object that stores all of the necessary information for a given event
 
 import Foundation
 import UIKit
@@ -37,6 +38,7 @@ class Event {
         })
     }
     
+    // Uses the imgid to download the image from Firebase and set the image of the current event object
     func setImage(completion: @escaping (Bool)->() ) {
         if (self.imgid == "default") {
             self.image = UIImage(named: "default")!
@@ -58,6 +60,7 @@ class Event {
         }
     }
     
+    // Getters and setters
     func getName() -> String {
         return self.name
     }
@@ -70,11 +73,13 @@ class Event {
         return self.startDate
     }
     
+    // Returns the date only (for displaying to the user)
     func getDate() -> String {
         let array = startDate.split(separator: " ")
         return "\(String(array[0]))"
     }
     
+    // Returns a formatted start time to end time string (for displaying to the user)
     func getTimes() -> String {
         let array = startDate.split(separator: " ")
         let dateAsString = array[1]
@@ -89,6 +94,7 @@ class Event {
         return "\(startTime)-\(dateFormatter.string(from: addTime!))"
     }
     
+    // Returns a date object of the start date of the event (for sorting)
     func getStartDate() -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
@@ -96,6 +102,7 @@ class Event {
         return date!
     }
     
+    // Returns a date object of the end date of the event (for sorting)
     func getEndDate() -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
