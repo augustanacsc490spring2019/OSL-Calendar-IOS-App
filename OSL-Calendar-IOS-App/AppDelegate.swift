@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
     var needUpdate: Bool = false
+    var link = ""
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let _ = RCValues.sharedInstance
@@ -96,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     // Called once the remote config successfully loaded the RC values
     func triggerFetched() {
-        let updateRequired = RemoteConfig.remoteConfig().configValue(forKey: "force_update_required").boolValue
+        let updateRequired = RemoteConfig.remoteConfig().configValue(forKey: "force_update_required_ios").boolValue
         if (updateRequired) {
             let cloudVersion = RemoteConfig.remoteConfig()
                 .configValue(forKey: "force_update_version_ios")
@@ -108,6 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             if (currentNum < cloudNum) {
                 self.window?.rootViewController?.view.isUserInteractionEnabled = false
                 updateAlert()
+                link = RemoteConfig.remoteConfig().configValue(forKey: "force_update_store_url_ios").stringValue ?? ""
                 needUpdate = true
             }
         }
@@ -117,8 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func updateAlert() {
         let alert = UIAlertController(title: "New Version Available", message: "Please update the app to the newest version.", preferredStyle: UIAlertController.Style.alert)
         let update = UIAlertAction(title: "Update", style: UIAlertAction.Style.default, handler: { action in
-            let link = "https://itunes.apple.com/us/app/aces-augustana-college/id1437441626?ls=1&mt=8"
-            if let url = URL(string: link), UIApplication.shared.canOpenURL(url) {
+            if let url = URL(string: self.link), UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: {(success: Bool) in
                     if success {
                         print("Launch successful")

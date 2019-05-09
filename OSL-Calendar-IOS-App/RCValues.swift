@@ -22,8 +22,9 @@ class RCValues {
     // Load the default values
     func loadDefaultValues() {
         let appDefaults: [String: Any?] = [
-            "force_update_required" : false,
-            "force_update_version_ios" : "1.0.0"
+            "force_update_required_ios" : false,
+            "force_update_version_ios" : "1.0.0",
+            "force_update_store_url_ios" : "" 
         ]
         RemoteConfig.remoteConfig().setDefaults(appDefaults as? [String: NSObject])
     }
