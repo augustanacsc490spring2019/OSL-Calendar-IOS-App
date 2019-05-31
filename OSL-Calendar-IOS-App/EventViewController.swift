@@ -65,9 +65,10 @@ class EventViewController: UIViewController, DisplayEvent {
     let eventNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
-        lbl.font = UIFont.boldSystemFont(ofSize: 32)
+        lbl.font = UIFont.boldSystemFont(ofSize: 24)
         lbl.textAlignment = .center
-        lbl.adjustsFontSizeToFitWidth = true
+        lbl.adjustsFontSizeToFitWidth = false
+        lbl.numberOfLines = 0
         return lbl
     }()
     
