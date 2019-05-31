@@ -91,6 +91,7 @@ class EventViewController: UIViewController, DisplayEvent {
         let imgView = UIImageView(image: UIImage(named: "augieIcon"))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
+        
         return imgView
     }()
     
@@ -250,8 +251,11 @@ class EventViewController: UIViewController, DisplayEvent {
         eventNameLabel.center.x = scrollView.center.x
         
         if let cgImage = event.image.cgImage {
-            let ratio = CGFloat(cgImage.width) / UIScreen.main.bounds.width
-            eventImage.anchor(top: eventNameLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: CGFloat(cgImage.height) / ratio, enableInsets: false)
+            var desiredHeight = CGFloat(cgImage.height) / CGFloat(cgImage.width) *  UIScreen.main.bounds.width;
+            if (desiredHeight > 300) {
+                desiredHeight = 300
+            }
+            eventImage.anchor(top: eventNameLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: UIScreen.main.bounds.width, height: desiredHeight, enableInsets: false)
             eventImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
         }
         
