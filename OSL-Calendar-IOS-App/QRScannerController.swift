@@ -14,6 +14,7 @@ import UIKit
 import AVFoundation
 import GoogleSignIn
 import FirebaseAuth
+import Firebase
 
 class QRScannerController: UIViewController {
    
@@ -41,7 +42,7 @@ class QRScannerController: UIViewController {
         self.view.makeToastActivity(.center)
         DispatchQueue.main.async {
         // Get the back-facing camera for capturing videos
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera],   mediaType: AVMediaType.video, position: .back)
+            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],   mediaType: AVMediaType.video, position: .back)
         
             guard let captureDevice = deviceDiscoverySession.devices.first else {
                 print("Failed to get the camera device")
@@ -140,6 +141,66 @@ class QRScannerController: UIViewController {
         present(alertPrompt, animated: true, completion: nil)
     }
     
+    func checkIn(decodedURL: String) {
+        //obtain the unique firebase event ID from the decodedURL of form
+        var startIndex = decodedURL.index(of: "?")!
+        startIndex = decodedURL.index(startIndex, offsetBy: 4)
+        var endIndex = decodedURL.index(of: "&")!
+        endIndex = decodedURL.index(endIndex, offsetBy: -1)
+        let eventID = String(decodedURL[startIndex...endIndex])
+        //obtain the user ID from the email of the current User
+        let currentAccount = Auth.auth().currentUser
+        let userEmail = currentAccount?.email
+        let userIndex = userEmail!.index(of: "@")!
+        let user = String((userEmail?.prefix(upTo: userIndex))!)
+        
+        //read the official event name from the database. If that is
+        //successful, we write the user into the database and display
+        //a confirmation message. If either action fails, a message
+        //appears asking the user to try again.
+        var eventDBref: DatabaseReference!
+        eventDBref = Database.database().reference().child("current-events").child(eventID)
+        let refHandle = eventDBref.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+            let name = snapshot.value as? String ?? ""
+            if (name != "") {
+                eventDBref.child("users").child(user).setValue(true){
+                    (error:Error?, ref:DatabaseReference) in
+                    if let error = error {
+                        print("Data could not be saved: \(error).")
+                        let message = "You were unable to check into " + name + ". Check your internet connection and try again."
+                        self.showConfirmationDialog("Check In Failed", message)
+                    } else {
+                        let message = "You have successfully checked into " + name + " as " + user + "."
+                        self.showConfirmationDialog("Checked In", message)
+                    }
+                }
+            } else {
+                let message = "Sorry, this event is in the past or no longer exists!"
+                self.showConfirmationDialog("Check In Failed", message)
+            }
+            
+            
+        }) { (error) in
+            print(error.localizedDescription)
+            let message = "We were unable to access this event. Check your internet connection and try again."
+            self.showConfirmationDialog("Check In Failed", message)
+        }
+        
+    }
+    
+    func showConfirmationDialog(_ dialogTitle: String, _ dialogMessage: String) {
+        if presentedViewController != nil {
+            return
+        }
+        
+        let alertPrompt = UIAlertController(title: dialogTitle, message: dialogMessage, preferredStyle: .actionSheet)
+        //let confirmAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action) -> Void in})
+        
+        //alertPrompt.addAction(confirmAction)
+        alertPrompt.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertPrompt, animated: true, completion: nil)
+    }
+    
 }
 
 extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
@@ -160,7 +221,8 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
             if metadataObj.stringValue != nil {
-                launchApp(decodedURL: metadataObj.stringValue!)
+                //launchApp(decodedURL: metadataObj.stringValue!)
+                checkIn(decodedURL: metadataObj.stringValue!)
             }
         }
     }
