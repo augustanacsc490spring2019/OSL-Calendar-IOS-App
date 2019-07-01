@@ -75,8 +75,9 @@ class Event {
     
     // Returns the date only (for displaying to the user)
     func getDate() -> String {
-        let array = startDate.split(separator: " ")
-        return "\(String(array[0]))"
+        let date = startDate.split(separator: " ")
+        let formattedDate = date[0].split(separator: "-")
+        return "\(String(formattedDate[1] + "-" + formattedDate[2] + "-" + formattedDate[0]))"
     }
     
     // Returns a formatted start time to end time string (for displaying to the user)
@@ -97,7 +98,7 @@ class Event {
     // Returns a date object of the start date of the event (for sorting)
     func getStartDate() -> Date {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         let date = dateFormatter.date(from:startDate)
         return date!
     }
@@ -105,7 +106,7 @@ class Event {
     // Returns a date object of the end date of the event (for sorting)
     func getEndDate() -> Date {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         let date = dateFormatter.date(from:startDate)
         var minutes = DateComponents.init()
         minutes.minute = getDuration()
