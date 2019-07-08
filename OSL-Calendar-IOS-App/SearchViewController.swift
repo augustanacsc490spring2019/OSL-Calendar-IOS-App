@@ -31,12 +31,19 @@ protocol DisplayEvent {
     func getEvent(event: Event)
 }
 
-class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
+class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, Return {
     
+    
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet weak var weekTraversalBar: UINavigationBar!
+    @IBOutlet weak var currentWeekLabel: UINavigationItem!
+    @IBOutlet weak var prevWeekButton: UIButton!
+    @IBOutlet weak var nextWeekButton: UIButton!
     @IBOutlet weak var sortButton: UIBarButtonItem!
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
     var filteredEvents: [Event] = []
+    var dateFilteredEvents: [Event] = []
     var database: DatabaseReference!
     var fixedHeightOfLabel: CGFloat = 45
     var index: Double = 0.6
@@ -49,6 +56,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
     var eventController = EventViewController()
     var isEvent = false
     let searchController = UISearchController(searchResultsController: nil)
+    var dateFilter = WeeklyDateFilter(currentDate: Date())
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,30 +69,37 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
         database = Database.database().reference().child("current-events")
         databaseListener()
         setUpSearchBar()
+        let font = UIFont(name: "Helvetica", size: 15)
+        weekTraversalBar.titleTextAttributes = [NSAttributedString.Key.font: font!]
+        nextWeekButton.addTarget(self, action: Selector(("nextWeekButtonClicked")), for: .touchUpInside)
+        prevWeekButton.addTarget(self, action: Selector(("prevWeekButtonClicked")), for: .touchUpInside)
+        prevWeekButton.isEnabled = false
     }
+    
+  
     
     // Number of sections in the table
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
     
     // Number of rows in the table, changes if filtering is active
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering() {
             return filteredEvents.count
         }
-        return sortedArray.count
+        return dateFilteredEvents.count
     }
     
     // Construct the table cells, different when filtering is active
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! EventCell
         
         let event: Event
         if isFiltering() {
             event = filteredEvents[indexPath.row]
         } else {
-            event = sortedArray[indexPath.row]
+            event = dateFilteredEvents[indexPath.row]
         }
         cell.event = event
         
@@ -99,7 +115,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
     }
     
     // Action for clicking a row in the table view
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         isEvent = true
         let event: Event
         if isFiltering() {
@@ -113,7 +129,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
                 presentEvent(event: event)
             }
         } else {
-            event = sortedArray[indexPath.row]
+            event = dateFilteredEvents[indexPath.row]
             if (searchController.isActive) {
                 searchController.dismiss(animated: false) {
                     self.presentEvent(event: event)
@@ -194,10 +210,16 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
     
     // Filter the search bar content on name, location, organization, and tags
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        if (searchText.count >= 3) {
         filteredEvents = sortedArray.filter({( event: Event) -> Bool in
             let text = searchText.lowercased()
             return event.name.lowercased().contains(text) || event.location.lowercased().contains(text) || event.organization.lowercased().contains(text) || event.tags.lowercased().contains(text)
         })
+        } else {
+            filteredEvents = sortedArray.filter({(event: Event) -> Bool in
+                return true
+            })
+        }
         tableView.reloadData()
     }
     
@@ -346,11 +368,35 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, Return {
             }
             group.notify(queue: .main, execute: {
                 self.sortArray()
+                self.filterByDate()
                 self.tableView.reloadData()
                 self.navigationController?.view.hideToastActivity()
                 self.navigationController?.view.isUserInteractionEnabled = true
             })
         })
+    }
+    
+    func filterByDate() {
+        dateFilteredEvents.removeAll()
+        for event in sortedArray {
+            if (dateFilter.applyFilter(event: event)) {
+                dateFilteredEvents.append(event)
+            }
+        }
+        currentWeekLabel.title = dateFilter.getCurrentWeekLabel()
+        tableView.reloadData()
+    }
+    
+    @IBAction func nextWeekButtonClicked() {
+        dateFilter.moveToNextWeek()
+        prevWeekButton.isEnabled = !dateFilter.isFilteringCurrentWeek()
+        filterByDate()
+    }
+    
+    @IBAction func prevWeekButtonClicked() {
+        dateFilter.moveToPreviousWeek()
+        prevWeekButton.isEnabled = !dateFilter.isFilteringCurrentWeek()
+        filterByDate()
     }
     
     // Add gestures to the sort radio option labels
