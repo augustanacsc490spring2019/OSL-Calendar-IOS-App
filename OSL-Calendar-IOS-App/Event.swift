@@ -10,9 +10,11 @@
 import Foundation
 import UIKit
 import FirebaseStorage
+import Kingfisher
 
 class Event {
     
+    var eventID = ""
     var name = ""
     var location = ""
     var startDate = ""
@@ -22,8 +24,9 @@ class Event {
     var imgid = ""
     var description = ""
     var image = UIImage()
+    var favoritedBy = [String : Bool]()
     
-    init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String) {
+    init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String, favoritedBy: Dictionary<String, Bool>) {
         self.name = name
         self.location = location
         self.startDate = startDate
@@ -32,6 +35,7 @@ class Event {
         self.tags = tags
         self.imgid = imgid
         self.description = description
+        self.favoritedBy = favoritedBy
         group.enter()
         setImage(completion: { boolean in
             group.leave()
@@ -46,6 +50,15 @@ class Event {
         } else {
             let storage = Storage.storage().reference()
             let picture = storage.child("Images").child("\(self.imgid).jpg")
+//            picture.downloadURL { (URL, Error) in
+//                KingfisherManager.shared.retrieveImage(with: URL!, options: nil, progressBlock: nil) { result in
+//                    switch result {
+//                        case .success(let value):  self.image = value.image
+//                        case .failure:  self.image = UIImage(named: "default")!
+//                    }
+//                    completion(true)
+//                }
+//            }
             picture.getData(maxSize: Int64.max) { data, error in
                 if let error = error {
                     print(error)
@@ -134,6 +147,14 @@ class Event {
         return self.description
     }
     
+    func getFavoritedBy() -> Dictionary<String, Bool> {
+        return self.favoritedBy
+    }
+    
+    func getEventID() -> String {
+        return self.eventID
+    }
+    
     func setName(name: String) {
         self.name = name
     }
@@ -166,4 +187,7 @@ class Event {
         self.description = description
     }
     
+    func setEventID(eventID: String) {
+        self.eventID = eventID
+    }
 }

@@ -15,6 +15,7 @@ target 'OSL-Calendar-IOS-App' do
   pod 'GoogleSignIn'
   pod 'Firebase/Storage'
   pod 'Firebase/RemoteConfig'
+  pod 'Kingfisher', '~> 5.0'
 
   target 'OSL-Calendar-IOS-AppTests' do
     inherit! :search_paths

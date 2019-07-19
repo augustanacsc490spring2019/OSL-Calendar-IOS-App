@@ -12,8 +12,10 @@ class WeeklyDateFilter {
     var startDate: Date
     var endDate: Date
     var DATE_FORMAT = DateFormatter()
+    var enabled : Bool
     
     init(currentDate: Date) {
+        enabled = false
         startDate = currentDate
         endDate = currentDate
         startDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: startDate)!
@@ -22,6 +24,9 @@ class WeeklyDateFilter {
     }
     
     func applyFilter(event: Event) -> Bool {
+        if (!enabled) {
+            return true
+        }
         return (event.getStartDate() > startDate && event.getStartDate() < endDate)
     }
     
@@ -68,5 +73,13 @@ class WeeklyDateFilter {
     func isFilteringCurrentWeek() -> Bool {
         let todayDate = Date()
         return (startDate < todayDate)
+    }
+    
+    func isEnabled() -> Bool {
+        return enabled
+    }
+    
+    func setEnabled(enabled : Bool) {
+        self.enabled = enabled
     }
 }

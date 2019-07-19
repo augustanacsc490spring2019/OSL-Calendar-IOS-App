@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 import EventKit
+import Firebase
 
 // Global dispatch group for loading events and getting images in search view controller
 var group = DispatchGroup()
@@ -106,6 +107,24 @@ class EventViewController: UIViewController, DisplayEvent {
         return btn
     }()
     
+    private let favoriteLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .black
+        lbl.font = UIFont.boldSystemFont(ofSize: 18)
+        lbl.textAlignment = .center
+        lbl.adjustsFontSizeToFitWidth = false
+        lbl.numberOfLines = 0
+        lbl.text = "In My Favorites: "
+        return lbl
+    }()
+    
+    private let favoriteSwitch : UISwitch = {
+        let swt = UISwitch()
+        swt.contentMode = .scaleAspectFit
+        swt.clipsToBounds = true
+        return swt
+    }()
+    
     var delegate: Return?
     var scrollView = UIScrollView()
     var containerView = UIView()
@@ -113,6 +132,12 @@ class EventViewController: UIViewController, DisplayEvent {
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
+        let user = Auth.auth().currentUser
+        let separated = user?.email?.split(separator: "@")
+        let email = String(separated!.first!)
+        if ((event?.getFavoritedBy().keys.contains(email))!) {
+            favoriteSwitch.setOn(true, animated: false)
+        }
     }
     
     // View will appear - set theme, check if in calendar
@@ -224,6 +249,19 @@ class EventViewController: UIViewController, DisplayEvent {
         }
     }
     
+    //TODO: Add print statements to check if the button is actually being clicked more than once. (May need to change to a Switch and Label if continues to not work) May need to changed favoritedBy from Dictionary to NSMutableDictionary (Google it first!)
+    @objc func favoriteAction() {
+        let user = Auth.auth().currentUser
+        let separated = user?.email?.split(separator: "@")
+        let email = String(separated!.first!)
+        var ref = Database.database().reference(withPath: "/current-events")
+        if (!favoriteSwitch.isOn) {
+            ref.child((event?.getEventID())!).child("favoritedBy").child(email).removeValue()
+        } else {
+            ref.child((event?.getEventID())!).child("favoritedBy").child(email).setValue(true)
+        }
+    }
+    
     let line1 = UILabel()
     let line2 = UILabel()
     
@@ -246,6 +284,8 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(line2)
         scrollView.addSubview(calendarButton)
+        scrollView.addSubview(favoriteLabel)
+        scrollView.addSubview(favoriteSwitch)
         
         eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         eventNameLabel.center.x = scrollView.center.x
@@ -267,11 +307,16 @@ class EventViewController: UIViewController, DisplayEvent {
         anchorField(titleLabel: organizationTitle, descriptionLabel: organizationLabel, lastDescriptionLabel: timeLabel, paddingTop: 0)
         anchorField(titleLabel: descriptionTitle, descriptionLabel: descriptionLabel, lastDescriptionLabel: organizationLabel, paddingTop: 0)
         
-        line2.anchor(top: descriptionLabel.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
+        line2.anchor(top: descriptionLabel.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
         
-        calendarButton.anchor(top: line2.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+    
+        calendarButton.anchor(top: favoriteSwitch.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         calendarButton.center.x = scrollView.center.x
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
+        favoriteSwitch.anchor(top: line2.bottomAnchor, left: favoriteLabel.rightAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        favoriteLabel.anchor(top: line2.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        
+        favoriteSwitch.addTarget(self, action: #selector(favoriteAction), for: .touchUpInside)
     }
     
     // Anchors a title label to the left of a description label and anchors them to the bottom of the previous description label

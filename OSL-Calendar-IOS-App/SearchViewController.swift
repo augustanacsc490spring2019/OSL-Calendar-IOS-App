@@ -18,14 +18,6 @@ import Toast_Swift
 // Impact generator for haptic feedback
 let impact = UIImpactFeedbackGenerator()
 
-// Enum for the different sort cases
-enum Sort {
-    case soonestFirst
-    case az
-    case za
-    case organization
-}
-
 // Protocol for getting the event in the detailed event view controller
 protocol DisplayEvent {
     func getEvent(event: Event)
@@ -34,12 +26,13 @@ protocol DisplayEvent {
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, Return {
     
     
+    @IBOutlet weak var startSearchButton: UIButton!
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var weekTraversalBar: UINavigationBar!
     @IBOutlet weak var currentWeekLabel: UINavigationItem!
     @IBOutlet weak var prevWeekButton: UIButton!
     @IBOutlet weak var nextWeekButton: UIButton!
-    @IBOutlet weak var sortButton: UIBarButtonItem!
     let themeManager = ThemeManager()
     var sortedArray: [Event] = []
     var filteredEvents: [Event] = []
@@ -52,15 +45,20 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var sortView = UIView()
     var options: [Checkbox] = []
     var firstSort = true
-    var sortBy: Sort = Sort.soonestFirst
     var eventController = EventViewController()
     var isEvent = false
     let searchController = UISearchController(searchResultsController: nil)
     var dateFilter = WeeklyDateFilter(currentDate: Date())
-    
+    var favoriteFilter = MyEventsFilter(user: "")
+    var searchFilter = SearchMultiFieldFilter(query: "")
+    var user : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let email = Auth.auth().currentUser
+        let separated = email?.email?.split(separator: "@")
+        user = String(separated!.first!)
+        favoriteFilter = MyEventsFilter(user: user)
         self.navigationController?.view.isUserInteractionEnabled = false
         self.navigationController?.view.makeToastActivity(.center)
         tableView.register(EventCell.self, forCellReuseIdentifier: "cellIdentifier")
@@ -73,10 +71,32 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         weekTraversalBar.titleTextAttributes = [NSAttributedString.Key.font: font!]
         nextWeekButton.addTarget(self, action: Selector(("nextWeekButtonClicked")), for: .touchUpInside)
         prevWeekButton.addTarget(self, action: Selector(("prevWeekButtonClicked")), for: .touchUpInside)
+        startSearchButton.addTarget(self, action: Selector(("startSearch")), for: .touchUpInside)
         prevWeekButton.isEnabled = false
     }
     
-  
+    func filter() {
+        if (self.tabBarController?.selectedIndex == 0 && !isFiltering()) {
+            weekTraversalBar.isHidden = false
+            dateFilter.setEnabled(enabled: true)
+            favoriteFilter.setEnabled(enabled: false)
+        } else if (self.tabBarController?.selectedIndex == 1 && !isFiltering()) {
+            weekTraversalBar.isHidden = true
+            dateFilter.setEnabled(enabled: false)
+            favoriteFilter.setEnabled(enabled: true)
+        }
+        filteredEvents.removeAll()
+        for event in sortedArray {
+            if (dateFilter.applyFilter(event: event) && favoriteFilter.applyFilter(event: event) && searchFilter.applyFilter(event: event)) {
+                filteredEvents.append(event)
+            }
+        }
+        currentWeekLabel.title = dateFilter.getCurrentWeekLabel()
+        if (searchFilter.isEnabled()) {
+            weekTraversalBar.isHidden = true
+        }
+        tableView.reloadData()
+    }
     
     // Number of sections in the table
 //    func numberOfSections(in tableView: UITableView) -> Int {
@@ -88,7 +108,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if isFiltering() {
             return filteredEvents.count
         }
-        return dateFilteredEvents.count
+        return filteredEvents.count
     }
     
     // Construct the table cells, different when filtering is active
@@ -99,7 +119,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if isFiltering() {
             event = filteredEvents[indexPath.row]
         } else {
-            event = dateFilteredEvents[indexPath.row]
+            event = filteredEvents[indexPath.row]
         }
         cell.event = event
         
@@ -129,7 +149,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 presentEvent(event: event)
             }
         } else {
-            event = dateFilteredEvents[indexPath.row]
+            event = filteredEvents[indexPath.row]
             if (searchController.isActive) {
                 searchController.dismiss(animated: false) {
                     self.presentEvent(event: event)
@@ -166,6 +186,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // View did appear, hide search bar when scrolling
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        filter()
         navigationItem.hidesSearchBarWhenScrolling = true
     }
     
@@ -177,30 +198,15 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.reloadData()
     }
     
-    // Action for clicking the sort button, toggle the sort menu
-    @IBAction func sortAction(_ sender: Any) {
-        if (self.isDown) {
-            searchController.searchBar.isUserInteractionEnabled = false
-            tableView.isUserInteractionEnabled = false
-            tableView.backgroundColor = Theme.sharedInstance.darkerBackground
-            sortView.isHidden = false
-            self.view.bringSubviewToFront(sortView)
-            self.sortButton.image = UIImage(named: "upSort")
-            self.isDown = false
-        } else {
-            closeSortView()
-        }
-        impact.impactOccurred()
-    }
-    
     // Set up the search bar
     func setUpSearchBar() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search..."
-        searchController.hidesNavigationBarDuringPresentation = false
-        navigationItem.searchController = searchController
+        searchController.hidesNavigationBarDuringPresentation = true
+//        navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
+        
     }
     
     // Returns true when the search bar is empty
@@ -209,16 +215,17 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     // Filter the search bar content on name, location, organization, and tags
+    //TODO: May need to make SearchMultiFieldFilter in addition to MyEventsFilter
+    //          See if this really needs to be done (but you probably should)
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         if (searchText.count >= 3) {
-        filteredEvents = sortedArray.filter({( event: Event) -> Bool in
-            let text = searchText.lowercased()
-            return event.name.lowercased().contains(text) || event.location.lowercased().contains(text) || event.organization.lowercased().contains(text) || event.tags.lowercased().contains(text)
-        })
+            weekTraversalBar.isHidden = true
+            searchFilter = SearchMultiFieldFilter(query: searchText.lowercased())
+            searchFilter.setEnabled(enabled: true)
+            dateFilter.setEnabled(enabled: false)
+            filter()
         } else {
-            filteredEvents = sortedArray.filter({(event: Event) -> Bool in
-                return true
-            })
+            filter()
         }
         tableView.reloadData()
     }
@@ -230,127 +237,31 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     // Action for pressing the cancel button in the search bar
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("Search is cancelled")
+        searchFilter.setEnabled(enabled: false)
+        weekTraversalBar.isHidden = false
         searchBar.text = ""
         searchBar.setShowsCancelButton(false, animated: true)
-        filterContentForSearchText("")
+        navigationItem.searchController = nil
+        //filterContentForSearchText("")
     }
     
-    // Close sort view
-    func closeSortView() {
-        sortView.isHidden = true
-        searchController.searchBar.isUserInteractionEnabled = true
-        tableView.isUserInteractionEnabled = true
-        tableView.backgroundColor = Theme.sharedInstance.backgroundColor
-        self.sortButton.image = UIImage(named: "downSort")
-        self.isDown = true
-        sortArray()
+    @IBAction func startSearch() {
+        navigationItem.searchController = searchController
+        searchController.isActive = true
     }
     
     // Sort the table based on the selected sort type
     func sortArray() {
-        if (self.options[0].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.getStartDate() < $1.getStartDate() })
-            self.sortBy = Sort.soonestFirst
-        } else if (self.options[1].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.name < $1.name })
-            self.sortBy = Sort.az
-        } else if (self.options[2].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.name > $1.name })
-            self.sortBy = Sort.za
-        } else if (self.options[3].isChecked) {
-            self.sortedArray = self.sortedArray.sorted(by: { $0.organization < $1.organization })
-            self.sortBy = Sort.organization
-        }
         if (isFiltering()){
             self.filterContentForSearchText(searchController.searchBar.text!)
         }
         tableView.reloadData()
     }
     
-    // Set up the sort view to be displayed when hitting the sort button
-    func setUpSortView() {
-        index = 0.6
-        options = []
-        sortView = UIView()
-        sortView.isHidden = true
-        sortView.backgroundColor = Theme.sharedInstance.backgroundColor
-        sortView.translatesAutoresizingMaskIntoConstraints = false
-        self.navigationController?.view.addSubview(sortView)
-        sortView.layer.borderWidth = 0.5
-        sortView.layer.borderColor = UIColor.lightGray.cgColor
-        let top = 0 + UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.size.height ?? 0)
-        sortView.topAnchor.constraint(equalTo: (self.navigationController?.view.topAnchor)!, constant: top).isActive = true
-        sortView.leftAnchor.constraint(equalTo: (self.navigationController?.view.leftAnchor)!, constant: 20).isActive = true
-        sortView.rightAnchor.constraint(equalTo: (self.navigationController?.view.rightAnchor)!, constant: -20).isActive = true
-        sortView.bottomAnchor.constraint(equalTo: (self.navigationController?.view.safeAreaLayoutGuide.bottomAnchor)!, constant: -20).isActive = true
-        makeLabelForRadio(text: "Sort", left: 40)
-        makeRadioOption(optionText: "Soonest First", left: 40)
-        makeRadioOption(optionText: "A-Z", left: 40)
-        makeRadioOption(optionText: "Z-A", left: 40)
-        makeRadioOption(optionText: "Group", left: 40)
-        initialSort()
-        setOptionColors()
-    }
-    
-    // Initial sort when first loading the app
-    func initialSort() {
-        if (sortBy == Sort.soonestFirst) {
-            options[0].isChecked = true
-        } else if (sortBy == Sort.az) {
-            options[1].isChecked = true
-        } else if (sortBy == Sort.za) {
-            options[2].isChecked = true
-        } else if (sortBy == Sort.organization) {
-            options[3].isChecked = true
-        }
-    }
-    
-    // Creates a label for a radio button
-    func makeLabelForRadio(text: String, left: CGFloat) -> UILabel {
-        let label = CustomLabel()
-        label.text = text
-        label.textColor = Theme.sharedInstance.textColor
-        label.translatesAutoresizingMaskIntoConstraints=false
-        sortView.addSubview(label)
-        label.topAnchor.constraint(equalTo: sortView.topAnchor, constant: CGFloat(index) * fixedHeightOfLabel).isActive = true
-        label.leftAnchor.constraint(equalTo: sortView.leftAnchor, constant: left).isActive = true
-        label.trailingAnchor.constraint(equalTo: sortView.trailingAnchor).isActive = true
-        index = index + 1
-        labels.append(label)
-        return label
-    }
-    
-    // Creates a checkbox
-    func makeOption(optionText: String, left: CGFloat) -> Checkbox {
-        let option = Checkbox()
-        option.translatesAutoresizingMaskIntoConstraints=false
-        sortView.addSubview(option)
-        option.topAnchor.constraint(equalTo: sortView.topAnchor, constant: CGFloat(index) * fixedHeightOfLabel).isActive = true
-        option.leftAnchor.constraint(equalTo: sortView.leftAnchor, constant: left).isActive = true
-        option.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        option.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        option.increasedTouchRadius = 10
-        let label = makeLabelForRadio(text: optionText, left: left+45)
-        options.append(option)
-        createGestures(label: label)
-        return option
-    }
-    
-    // Creates a radio option
-    func makeRadioOption(optionText: String, left: CGFloat) {
-        let option = makeOption(optionText: optionText, left: left)
-        option.borderStyle = .circle
-        option.borderWidth = 3
-        option.checkmarkStyle = .circle
-        option.valueChanged = { (isChecked) in
-            self.handleOptionClick(option: option)
-        }
-    }
-    
     // Listener for the current events in the database
     func databaseListener() {
         self.setTheme()
-        self.setUpSortView()
         database.observe(DataEventType.value, with: { (snapshot) in
             self.sortedArray = []
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
@@ -363,12 +274,14 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let tags = postDict?["tags"] as? String ?? ""
                 let imgid = postDict?["imgid"] as? String ?? ""
                 let description = postDict?["description"] as? String ?? ""
-                let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description)
+                let favoritedBy = postDict?["favoritedBy"] as? Dictionary<String, Bool> ?? [:]
+                let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description, favoritedBy: favoritedBy)
+                event.setEventID(eventID: snap.key)
                 self.sortedArray.append(event)
             }
             group.notify(queue: .main, execute: {
                 self.sortArray()
-                self.filterByDate()
+                self.filter()
                 self.tableView.reloadData()
                 self.navigationController?.view.hideToastActivity()
                 self.navigationController?.view.isUserInteractionEnabled = true
@@ -376,72 +289,16 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
     }
     
-    func filterByDate() {
-        dateFilteredEvents.removeAll()
-        for event in sortedArray {
-            if (dateFilter.applyFilter(event: event)) {
-                dateFilteredEvents.append(event)
-            }
-        }
-        currentWeekLabel.title = dateFilter.getCurrentWeekLabel()
-        tableView.reloadData()
-    }
-    
     @IBAction func nextWeekButtonClicked() {
         dateFilter.moveToNextWeek()
         prevWeekButton.isEnabled = !dateFilter.isFilteringCurrentWeek()
-        filterByDate()
+        filter()
     }
     
     @IBAction func prevWeekButtonClicked() {
         dateFilter.moveToPreviousWeek()
         prevWeekButton.isEnabled = !dateFilter.isFilteringCurrentWeek()
-        filterByDate()
-    }
-    
-    // Add gestures to the sort radio option labels
-    func createGestures(label: UILabel) {
-        if options.count == 1 {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap1(sender:)))
-            label.addGestureRecognizer(gestureRecognizer)
-        } else if options.count == 2 {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap2(sender:)))
-            label.addGestureRecognizer(gestureRecognizer)
-        } else if options.count == 3 {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap3(sender:)))
-            label.addGestureRecognizer(gestureRecognizer)
-        } else if options.count == 4 {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap4(sender:)))
-            label.addGestureRecognizer(gestureRecognizer)
-        }
-        label.isUserInteractionEnabled = true
-    }
-    
-    @objc func handleTap1(sender: UIGestureRecognizer) {
-        handleOptionClick(option: options[0])
-    }
-    
-    @objc func handleTap2(sender: UIGestureRecognizer) {
-        handleOptionClick(option: options[1])
-    }
-    
-    @objc func handleTap3(sender: UIGestureRecognizer) {
-        handleOptionClick(option: options[2])
-    }
-    
-    @objc func handleTap4(sender: UIGestureRecognizer) {
-        handleOptionClick(option: options[3])
-    }
-    
-    // Action for handling when a sort option is clicked
-    func handleOptionClick(option: Checkbox) {
-        let index = self.options.firstIndex(of: option) ?? 0
-        for option in options {
-            option.isChecked = false
-        }
-        self.options[index].isChecked = true
-        self.closeSortView()
-        impact.impactOccurred()
+        filter()
     }
     
     // Sets the theme of the view controller
@@ -490,8 +347,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 // Extension for filtering using the search bar
 extension SearchViewController: UISearchResultsUpdating {
-    
     func updateSearchResults(for searchController: UISearchController) {
+        if (searchController.isActive) {
+            searchFilter.setEnabled(enabled: true)
+        } else {
+            searchFilter.setEnabled(enabled: false)
+        }
         filterContentForSearchText(searchController.searchBar.text!)
     }
     
