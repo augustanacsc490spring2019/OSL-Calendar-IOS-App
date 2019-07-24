@@ -34,6 +34,23 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         return lbl
     }()
     
+    let privacyPolicyLabel : UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .black
+        lbl.font = UIFont.systemFont(ofSize: 12)
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.textColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        lbl.textAlignment = .center
+        lbl.translatesAutoresizingMaskIntoConstraints=false
+        lbl.numberOfLines = 0
+        let attributedString = NSMutableAttributedString(string: "By signing in you agree to our privacy policy")
+        let url = URL(string: "https://osl-events-app.firebaseapp.com/privacy_policy.html")!
+        attributedString.setAttributes([.link: url], range: NSMakeRange(0, 45))
+        lbl.attributedText = attributedString
+        lbl.isUserInteractionEnabled = true
+        return lbl
+    }()
+    
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +59,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         addTitle()
         addIcon()
         addGoogleBtn()
+        addPrivacyPolicy()
     }
     
     // Anchor and add the title to the sign in page
@@ -76,11 +94,19 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         view.addSubview(googleButton)
         googleButton.translatesAutoresizingMaskIntoConstraints=false
         googleButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
-        googleButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        googleButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         googleButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         googleButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         googleButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         GIDSignIn.sharedInstance().uiDelegate = self
+    }
+    
+    func addPrivacyPolicy() {
+        self.view.addSubview(privacyPolicyLabel)
+        privacyPolicyLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive=true
+        privacyPolicyLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive=true
+        privacyPolicyLabel.widthAnchor.constraint(equalToConstant: view.frame.width).isActive=true
+        privacyPolicyLabel.heightAnchor.constraint(equalToConstant: 20).isActive=true
     }
     
     // Handles the action for the loginBtn, shows activity spinner
