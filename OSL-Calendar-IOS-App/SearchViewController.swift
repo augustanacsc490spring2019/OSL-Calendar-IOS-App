@@ -275,7 +275,8 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let imgid = postDict?["imgid"] as? String ?? ""
                 let description = postDict?["description"] as? String ?? ""
                 let favoritedBy = postDict?["favoritedBy"] as? Dictionary<String, Bool> ?? [:]
-                let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description, favoritedBy: favoritedBy)
+                let webLink = postDict?["webLink"] as? String ?? ""
+                let event = Event(name: name, location: location, startDate: startDate, duration: duration, organization: organization, tags: tags, imgid: imgid, description: description, favoritedBy: favoritedBy, webLink: webLink)
                 event.setEventID(eventID: snap.key)
                 self.sortedArray.append(event)
             }

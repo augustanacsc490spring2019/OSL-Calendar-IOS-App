@@ -25,8 +25,9 @@ class Event {
     var description = ""
     var image = UIImage()
     var favoritedBy = [String : Bool]()
+    var webLink = ""
     
-    init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String, favoritedBy: Dictionary<String, Bool>) {
+    init(name: String, location: String, startDate: String, duration: Int, organization: String, tags: String, imgid: String, description: String, favoritedBy: Dictionary<String, Bool>, webLink: String) {
         self.name = name
         self.location = location
         self.startDate = startDate
@@ -36,6 +37,7 @@ class Event {
         self.imgid = imgid
         self.description = description
         self.favoritedBy = favoritedBy
+        self.webLink = webLink
         group.enter()
         setImage(completion: { boolean in
             group.leave()
@@ -145,6 +147,10 @@ class Event {
     
     func getDescription() -> String {
         return self.description
+    }
+    
+    func getWebLink() -> String {
+        return self.webLink
     }
     
     func getFavoritedBy() -> Dictionary<String, Bool> {

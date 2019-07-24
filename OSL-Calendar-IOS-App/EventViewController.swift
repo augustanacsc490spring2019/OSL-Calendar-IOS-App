@@ -125,6 +125,15 @@ class EventViewController: UIViewController, DisplayEvent {
         return swt
     }()
     
+    private let webLinkText : UITextView = {
+        let txt = UITextView()
+        txt.isEditable = false
+        txt.isScrollEnabled = false
+        return txt
+    }()
+    let linkTitle = makeLabel(text: "Link:", font: UIFont.boldSystemFont(ofSize: 18))
+    
+    
     var delegate: Return?
     var scrollView = UIScrollView()
     var containerView = UIView()
@@ -137,6 +146,18 @@ class EventViewController: UIViewController, DisplayEvent {
         let email = String(separated!.first!)
         if ((event?.getFavoritedBy().keys.contains(email))!) {
             favoriteSwitch.setOn(true, animated: false)
+        }
+        if (event?.getWebLink() == "") {
+            webLinkText.isHidden = true
+            linkTitle.isHidden = true
+        } else {
+            let attributedString = NSMutableAttributedString(string: "Click here for more details")
+            let link = (event?.getWebLink())!
+            let url = URL(string: link)!
+            attributedString.setAttributes([.link: url], range: NSMakeRange(0, 27))
+            self.webLinkText.attributedText = attributedString
+            self.webLinkText.isUserInteractionEnabled = true
+            webLinkText.font = UIFont.systemFont(ofSize: 18)
         }
     }
     
@@ -282,10 +303,13 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.addSubview(organizationLabel)
         scrollView.addSubview(descriptionTitle)
         scrollView.addSubview(descriptionLabel)
+        scrollView.addSubview(linkTitle)
+        scrollView.addSubview(webLinkText)
         scrollView.addSubview(line2)
         scrollView.addSubview(calendarButton)
         scrollView.addSubview(favoriteLabel)
         scrollView.addSubview(favoriteSwitch)
+        
         
         eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         eventNameLabel.center.x = scrollView.center.x
@@ -306,8 +330,9 @@ class EventViewController: UIViewController, DisplayEvent {
         anchorField(titleLabel: timeTitle, descriptionLabel: timeLabel, lastDescriptionLabel: dateLabel, paddingTop: 0)
         anchorField(titleLabel: organizationTitle, descriptionLabel: organizationLabel, lastDescriptionLabel: timeLabel, paddingTop: 0)
         anchorField(titleLabel: descriptionTitle, descriptionLabel: descriptionLabel, lastDescriptionLabel: organizationLabel, paddingTop: 0)
+        anchorField(titleLabel: linkTitle, descriptionLabel: webLinkText, lastDescriptionLabel: descriptionLabel, paddingTop: 0)
         
-        line2.anchor(top: descriptionLabel.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
+        line2.anchor(top: webLinkText.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
         
     
         calendarButton.anchor(top: favoriteSwitch.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
