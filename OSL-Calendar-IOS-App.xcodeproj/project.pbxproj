@@ -29,6 +29,7 @@
 		76B478FC224A828000B66CD2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478FB224A828000B66CD2 /* Event.swift */; };
 		76E7ADE3224ABE8800A96375 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */; };
 		7EFAA0E85F8D30F5133981E2 /* Pods_OSL_Calendar_IOS_AppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */; };
+		D269F12E22E9EC52006B93EE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D269F12D22E9EC52006B93EE /* AboutView.swift */; };
 		D2B26CAD22CF9F6800DE666C /* WeeklyDateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B26CAC22CF9F6800DE666C /* WeeklyDateFilter.swift */; };
 		D2B26CAF22DCDCDD00DE666C /* MyEventsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B26CAE22DCDCDD00DE666C /* MyEventsFilter.swift */; };
 		D2B26CB722DE297500DE666C /* SearchMultiFieldFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B26CB622DE297500DE666C /* SearchMultiFieldFilter.swift */; };
@@ -82,6 +83,7 @@
 		90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-App.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App.release.xcconfig"; sourceTree = "<group>"; };
 		A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_AppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D269F12D22E9EC52006B93EE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D2AC42DB222CC65A407AAE3F /* Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppTests/Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D2B26CAC22CF9F6800DE666C /* WeeklyDateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyDateFilter.swift; sourceTree = "<group>"; };
 		D2B26CAE22DCDCDD00DE666C /* MyEventsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsFilter.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				D2B26CAE22DCDCDD00DE666C /* MyEventsFilter.swift */,
 				762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */,
 				7669234B224A800500145FBE /* SearchViewController.swift */,
+				D269F12D22E9EC52006B93EE /* AboutView.swift */,
 				D2B26CB622DE297500DE666C /* SearchMultiFieldFilter.swift */,
 				762108F7224C711900E13A3E /* EventViewController.swift */,
 				762108F3224C455D00E13A3E /* QRScannerController.swift */,
@@ -459,6 +462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D269F12E22E9EC52006B93EE /* AboutView.swift in Sources */,
 				D2B26CAF22DCDCDD00DE666C /* MyEventsFilter.swift in Sources */,
 				762108F6224C51DF00E13A3E /* GoogleSignInViewController.swift in Sources */,
 				763344E1225684D400FF4802 /* EventCell.swift in Sources */,

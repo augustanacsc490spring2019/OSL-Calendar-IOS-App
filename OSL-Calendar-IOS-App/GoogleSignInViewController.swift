@@ -34,6 +34,15 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         return lbl
     }()
     
+    let aboutButton : UIButton = {
+        let aboutButton = UIButton()
+        aboutButton.setTitle("?", for: .normal)
+        aboutButton.setTitleColor(.black, for: .normal)
+        aboutButton.backgroundColor = .lightGray
+        aboutButton.translatesAutoresizingMaskIntoConstraints = false
+        return aboutButton
+    }()
+    
     let privacyPolicyLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -60,6 +69,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         addIcon()
         addGoogleBtn()
         addPrivacyPolicy()
+        addAboutBtn()
     }
     
     // Anchor and add the title to the sign in page
@@ -96,9 +106,19 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         googleButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
         googleButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
         googleButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
-        googleButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
+        googleButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -60).isActive = true
         googleButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         GIDSignIn.sharedInstance().uiDelegate = self
+    }
+    
+    func addAboutBtn() {
+        view.addSubview(aboutButton)
+        aboutButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -53).isActive = true
+        aboutButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
+        aboutButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        aboutButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 270).isActive = true
+        aboutButton.addTarget(self, action: #selector(aboutAction(_:)), for: .touchUpInside)
+        
     }
     
     func addPrivacyPolicy() {
@@ -113,6 +133,11 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     @objc func loginAction() {
         self.view.makeToastActivity(.center)
         self.view.isUserInteractionEnabled = false
+    }
+    
+    @objc func aboutAction(_ sender: UIButton) {
+        let nextView: AboutView = AboutView()
+        self.present(nextView, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

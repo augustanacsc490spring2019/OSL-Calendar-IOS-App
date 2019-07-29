@@ -23,12 +23,14 @@ class SettingsViewController: UIViewController {
     var labels: [UILabel] = []
     var options: [Checkbox] = []
     var signOutButton: UIButton = UIButton()
+    var aboutButton : UIButton = UIButton()
     
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpScrollView()
         setUpThemeOptions()
+        addAboutButton()
         addSignOutButton()
         setTheme()
     }
@@ -77,7 +79,7 @@ class SettingsViewController: UIViewController {
         signOutButton.backgroundColor = UIColor.init(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
         signOutButton.translatesAutoresizingMaskIntoConstraints=false
         scrollView.addSubview(signOutButton)
-        signOutButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: CGFloat(index) * fixedHeightOfLabel).isActive = true
+        signOutButton.topAnchor.constraint(equalTo: aboutButton.bottomAnchor, constant: 10).isActive = true
         signOutButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20).isActive = true
         signOutButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20).isActive = true
         signOutButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10).isActive = true
@@ -85,10 +87,29 @@ class SettingsViewController: UIViewController {
         signOutButton.addTarget(self, action: #selector(signOutAction(_:)), for: .touchUpInside)
     }
     
+    func addAboutButton() {
+        aboutButton = UIButton()
+        aboutButton.setTitle("About", for: .normal)
+        aboutButton.setTitleColor(.black, for: .normal)
+        aboutButton.backgroundColor = UIColor.init(red: 135/255, green: 206/255, blue: 250/255, alpha: 1)
+        aboutButton.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(aboutButton)
+        aboutButton.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: CGFloat(index) * fixedHeightOfLabel).isActive = true
+        aboutButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20).isActive = true
+        aboutButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20).isActive = true
+        aboutButton.heightAnchor.constraint(equalToConstant: fixedHeightOfLabel).isActive = true
+        aboutButton.addTarget(self, action: #selector(aboutAction(_:)), for: .touchUpInside)
+    }
+    
     // Action for the sign out button
     @objc func signOutAction(_ sender: UIButton) {
         impact.impactOccurred()
         displaySignOutPopup()
+    }
+    
+    @objc func aboutAction(_ sender: UIButton) {
+        let nextView: AboutView = AboutView()
+        self.present(nextView, animated: true, completion: nil)
     }
     
     // Displays a pop up asking if the user would really like to sign out
