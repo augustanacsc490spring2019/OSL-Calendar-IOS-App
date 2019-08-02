@@ -338,9 +338,10 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func getTheme() {
         let preferences = UserDefaults.standard
         if let theme = preferences.string(forKey: "theme") {
-            themeManager.setInitialTheme(theme: theme)
+            //themeManager.setInitialTheme(theme: theme)
+            themeManager.setInitialTheme(theme: "white")
         } else {
-            themeManager.setInitialTheme(theme: "augie")
+            themeManager.setInitialTheme(theme: "white")
         }
     }
     

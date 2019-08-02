@@ -29,10 +29,10 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpScrollView()
-        setUpThemeOptions()
+        //setUpThemeOptions()
         addAboutButton()
         addSignOutButton()
-        setTheme()
+        //setTheme()
     }
     
     // View will appear

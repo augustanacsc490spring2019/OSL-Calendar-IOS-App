@@ -48,7 +48,7 @@ class AboutView: UIViewController, UITextViewDelegate {
             .link: NSURL(string: "mailto:\("osleventsapp@augustana.edu")")!,
             .foregroundColor: UIColor.blue
         ]
-        let attributedString = NSMutableAttributedString(string: "OSL Events App\n\nPlease email any problems, bugs, or suggestions here! Thanks!\n\nPurpose:\nTo provide an easy way for students to view, track, and check into events they attend held by different student groups on campus.\n\nHours:\nAlways open\n\nPhone:\n309-794-2695\n\nDevs:\nKyle Workman, Michael Wardach\n\n(Made by Augustana students for Augustana students!)\n\nAdvised by Dr. Stonedahl")
+        let attributedString = NSMutableAttributedString(string: "OSL Events App\n\nPlease email any problems, bugs, or suggestions here! Thanks!\n\nPurpose:\nTo provide an easy way for students to view, track, and check into events they attend held by different student groups on campus.\n\nHours:\nAlways open\n\nPhone:\n309-794-2695\n\nDevs:\nKyle Workman, Jared Haeme, Brandon Thompson, Jack Cannell, Brent Pierce, Paige Oucheriah, Michael Wardach\n\n(Made by Augustana students for Augustana students!)\n\nAdvised by Dr. Stonedahl")
         attributedString.setAttributes(linkAttributes, range: NSMakeRange(64, 4))
         self.textView.delegate = self
         self.textView.attributedText = attributedString

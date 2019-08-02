@@ -17,7 +17,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
     // Image view of sign in page
     private let icon : UIImageView = {
-        let imgView = UIImageView(image: UIImage(named: "augieMedal"))
+        let imgView = UIImageView(image: UIImage(named: "VikeLife"))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
@@ -30,7 +30,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         lbl.font = UIFont.boldSystemFont(ofSize: 48)
         lbl.textAlignment = .center
         lbl.adjustsFontSizeToFitWidth = true
-        lbl.text = "Augie Events"
+        lbl.text = "Vike Life"
         return lbl
     }()
     
@@ -43,15 +43,14 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         return aboutButton
     }()
     
-    let privacyPolicyLabel : UILabel = {
-        let lbl = UILabel()
+    let privacyPolicyLabel : UITextView = {
+        let lbl = UITextView()
         lbl.textColor = .black
         lbl.font = UIFont.systemFont(ofSize: 12)
-        lbl.adjustsFontSizeToFitWidth = true
+        lbl.isEditable = false
         lbl.textColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints=false
-        lbl.numberOfLines = 0
         let attributedString = NSMutableAttributedString(string: "By signing in you agree to our privacy policy")
         let url = URL(string: "https://osl-events-app.firebaseapp.com/privacy_policy.html")!
         attributedString.setAttributes([.link: url], range: NSMakeRange(0, 45))
@@ -104,7 +103,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
         view.addSubview(googleButton)
         googleButton.translatesAutoresizingMaskIntoConstraints=false
         googleButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
-        googleButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
+        googleButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -40).isActive = true
         googleButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         googleButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -60).isActive = true
         googleButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
@@ -113,7 +112,7 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
     func addAboutBtn() {
         view.addSubview(aboutButton)
-        aboutButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -53).isActive = true
+        aboutButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -43).isActive = true
         aboutButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         aboutButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         aboutButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 270).isActive = true
@@ -123,10 +122,10 @@ class GoogleSignInViewController: UIViewController, GIDSignInUIDelegate {
     
     func addPrivacyPolicy() {
         self.view.addSubview(privacyPolicyLabel)
-        privacyPolicyLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive=true
-        privacyPolicyLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive=true
+        privacyPolicyLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive=true
+        privacyPolicyLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 40).isActive=true
         privacyPolicyLabel.widthAnchor.constraint(equalToConstant: view.frame.width).isActive=true
-        privacyPolicyLabel.heightAnchor.constraint(equalToConstant: 20).isActive=true
+        privacyPolicyLabel.heightAnchor.constraint(equalToConstant: 30).isActive=true
     }
     
     // Handles the action for the loginBtn, shows activity spinner

@@ -59,6 +59,13 @@ class EventViewController: UIViewController, DisplayEvent {
                     descriptionLabel.text = "No Description Available"
                 }
             }
+            if let tags = event?.getTags() {
+                tagsLabel.text = "\(tags)"
+                if (tags == "") {
+                    tagsLabel.isHidden = true
+                    tagsTitle.isHidden = true
+                }
+            }
         }
     }
     
@@ -78,6 +85,7 @@ class EventViewController: UIViewController, DisplayEvent {
     let dateTitle = makeLabel(text: "Date:", font: UIFont.boldSystemFont(ofSize: 18))
     let timeTitle = makeLabel(text: "Time:", font: UIFont.boldSystemFont(ofSize: 18))
     let organizationTitle = makeLabel(text: "Group:", font: UIFont.boldSystemFont(ofSize: 18))
+    let tagsTitle = makeLabel(text: "Tags:", font: UIFont.boldSystemFont(ofSize: 18))
     let descriptionTitle = makeLabel(text: "Description:", font: UIFont.boldSystemFont(ofSize: 18))
     
     // Labels for the different event attributes
@@ -86,6 +94,7 @@ class EventViewController: UIViewController, DisplayEvent {
     let timeLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let organizationLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     let descriptionLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
+    let tagsLabel = makeLabel(text: "", font: UIFont.systemFont(ofSize: 18))
     
     // Image view for the event object's image
     private let eventImage : UIImageView = {
@@ -301,6 +310,8 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.addSubview(timeLabel)
         scrollView.addSubview(organizationTitle)
         scrollView.addSubview(organizationLabel)
+        scrollView.addSubview(tagsTitle)
+        scrollView.addSubview(tagsLabel)
         scrollView.addSubview(descriptionTitle)
         scrollView.addSubview(descriptionLabel)
         scrollView.addSubview(linkTitle)
@@ -329,17 +340,18 @@ class EventViewController: UIViewController, DisplayEvent {
         anchorField(titleLabel: dateTitle, descriptionLabel: dateLabel, lastDescriptionLabel: locationLabel, paddingTop: 0)
         anchorField(titleLabel: timeTitle, descriptionLabel: timeLabel, lastDescriptionLabel: dateLabel, paddingTop: 0)
         anchorField(titleLabel: organizationTitle, descriptionLabel: organizationLabel, lastDescriptionLabel: timeLabel, paddingTop: 0)
-        anchorField(titleLabel: descriptionTitle, descriptionLabel: descriptionLabel, lastDescriptionLabel: organizationLabel, paddingTop: 0)
+        anchorField(titleLabel: tagsTitle, descriptionLabel: tagsLabel, lastDescriptionLabel: organizationLabel, paddingTop: 0)
+        anchorField(titleLabel: descriptionTitle, descriptionLabel: descriptionLabel, lastDescriptionLabel: tagsLabel, paddingTop: 0)
         anchorField(titleLabel: linkTitle, descriptionLabel: webLinkText, lastDescriptionLabel: descriptionLabel, paddingTop: 0)
         
-        line2.anchor(top: webLinkText.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
+        line2.anchor(top: descriptionTitle.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
         
     
         calendarButton.anchor(top: favoriteSwitch.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         calendarButton.center.x = scrollView.center.x
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
-        favoriteSwitch.anchor(top: line2.bottomAnchor, left: favoriteLabel.rightAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 45, enableInsets: false)
-        favoriteLabel.anchor(top: line2.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        favoriteSwitch.anchor(top: webLinkText.bottomAnchor, left: favoriteLabel.rightAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        favoriteLabel.anchor(top: webLinkText.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
         
         favoriteSwitch.addTarget(self, action: #selector(favoriteAction), for: .touchUpInside)
     }
@@ -356,6 +368,7 @@ class EventViewController: UIViewController, DisplayEvent {
         self.view.backgroundColor = Theme.sharedInstance.backgroundColor
         eventNameLabel.textColor = Theme.sharedInstance.textColor
         calendarButton.backgroundColor = Theme.sharedInstance.buttonColor
+        favoriteLabel.textColor = Theme.sharedInstance.textColor
         locationTitle.textColor = Theme.sharedInstance.textColor
         locationLabel.textColor = Theme.sharedInstance.textColor
         dateTitle.textColor = Theme.sharedInstance.textColor
@@ -364,8 +377,13 @@ class EventViewController: UIViewController, DisplayEvent {
         timeLabel.textColor = Theme.sharedInstance.textColor
         organizationTitle.textColor = Theme.sharedInstance.textColor
         organizationLabel.textColor = Theme.sharedInstance.textColor
+        tagsTitle.textColor = Theme.sharedInstance.textColor
+        tagsLabel.textColor = Theme.sharedInstance.textColor
         descriptionTitle.textColor = Theme.sharedInstance.textColor
         descriptionLabel.textColor = Theme.sharedInstance.textColor
+        webLinkText.backgroundColor = Theme.sharedInstance.backgroundColor
+        webLinkText.textColor = Theme.sharedInstance.textColor
+        linkTitle.textColor = Theme.sharedInstance.textColor
         line1.backgroundColor = Theme.sharedInstance.lineColor
         line2.backgroundColor = Theme.sharedInstance.lineColor
     }
