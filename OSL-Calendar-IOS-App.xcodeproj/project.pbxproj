@@ -29,6 +29,7 @@
 		76B478FC224A828000B66CD2 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B478FB224A828000B66CD2 /* Event.swift */; };
 		76E7ADE3224ABE8800A96375 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76E7ADE2224ABE8800A96375 /* GoogleService-Info.plist */; };
 		7EFAA0E85F8D30F5133981E2 /* Pods_OSL_Calendar_IOS_AppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */; };
+		D232B2D5232957B5000A74DA /* MyIDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D232B2D4232957B5000A74DA /* MyIDController.swift */; };
 		D269F12E22E9EC52006B93EE /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D269F12D22E9EC52006B93EE /* AboutView.swift */; };
 		D2B26CAD22CF9F6800DE666C /* WeeklyDateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B26CAC22CF9F6800DE666C /* WeeklyDateFilter.swift */; };
 		D2B26CAF22DCDCDD00DE666C /* MyEventsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B26CAE22DCDCDD00DE666C /* MyEventsFilter.swift */; };
@@ -83,6 +84,7 @@
 		90D832D9469EEF92BC078739 /* Pods-OSL-Calendar-IOS-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-App.release.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-App/Pods-OSL-Calendar-IOS-App.release.xcconfig"; sourceTree = "<group>"; };
 		A2449828A84F88A0A85095F6 /* Pods_OSL_Calendar_IOS_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8AD9CDA3F096F045BC11EEF /* Pods_OSL_Calendar_IOS_AppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OSL_Calendar_IOS_AppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D232B2D4232957B5000A74DA /* MyIDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIDController.swift; sourceTree = "<group>"; };
 		D269F12D22E9EC52006B93EE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		D269F12F22EF5002006B93EE /* OSL-Calendar-IOS-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OSL-Calendar-IOS-App.entitlements"; sourceTree = "<group>"; };
 		D2AC42DB222CC65A407AAE3F /* Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; path = "Target Support Files/Pods-OSL-Calendar-IOS-AppTests/Pods-OSL-Calendar-IOS-AppTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				D2B26CAE22DCDCDD00DE666C /* MyEventsFilter.swift */,
 				762108F5224C51DF00E13A3E /* GoogleSignInViewController.swift */,
 				7669234B224A800500145FBE /* SearchViewController.swift */,
+				D232B2D4232957B5000A74DA /* MyIDController.swift */,
 				D269F12D22E9EC52006B93EE /* AboutView.swift */,
 				D2B26CB622DE297500DE666C /* SearchMultiFieldFilter.swift */,
 				762108F7224C711900E13A3E /* EventViewController.swift */,
@@ -475,6 +478,7 @@
 				763344E1225684D400FF4802 /* EventCell.swift in Sources */,
 				7629495722849E840005957E /* RCValues.swift in Sources */,
 				762421F2225FB8B100753C20 /* CustomLabel.swift in Sources */,
+				D232B2D5232957B5000A74DA /* MyIDController.swift in Sources */,
 				7669234C224A800500145FBE /* SearchViewController.swift in Sources */,
 				D2B26CB722DE297500DE666C /* SearchMultiFieldFilter.swift in Sources */,
 				D2B26CAD22CF9F6800DE666C /* WeeklyDateFilter.swift in Sources */,
@@ -670,7 +674,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.augustana.OSL-Calendar-IOS-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -689,7 +693,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.augustana.OSL-Calendar-IOS-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

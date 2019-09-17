@@ -113,17 +113,6 @@
       "idiom" : "ios-marketing",
       "filename" : "1024.jpg",
       "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "40-3.jpg",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "48.jpg",
-      "unassigned" : true,
-      "scale" : "1x"
     }
   ],
   "info" : {
