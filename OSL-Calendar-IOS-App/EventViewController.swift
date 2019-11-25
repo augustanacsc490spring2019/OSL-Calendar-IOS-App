@@ -116,6 +116,16 @@ class EventViewController: UIViewController, DisplayEvent {
         return btn
     }()
     
+    private let secureCheckButton : UIButton = {
+        let btn = UIButton()
+        btn.contentMode = .scaleAspectFit
+        btn.clipsToBounds = true
+        btn.setTitle("Secure Check-In", for: .normal)
+        btn.backgroundColor = Theme.sharedInstance.buttonColor
+        btn.setTitleColor(.black, for: .normal)
+        return btn
+    }()
+    
     private let favoriteLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
@@ -284,12 +294,52 @@ class EventViewController: UIViewController, DisplayEvent {
         let user = Auth.auth().currentUser
         let separated = user?.email?.split(separator: "@")
         let email = String(separated!.first!)
-        var ref = Database.database().reference(withPath: "/current-events")
+        var ref = Database.database().reference(withPath: "/current-events").child(self.event!.getEventID())
         if (!favoriteSwitch.isOn) {
-            ref.child((event?.getEventID())!).child("favoritedBy").child(email).removeValue()
+            ref.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+                let name = snapshot.value as? String ?? ""
+                if (name != "") {
+                    ref.child((self.event?.getEventID())!).child("favoritedBy").child(email).removeValue()
+                } else {
+                    let dialogTitle = "Event No Longer Exists"
+                    let dialogMessage = "This event no longer exists, and will not be added to \"My Events\".";
+                    self.showErrorDialog(dialogTitle, dialogMessage)
+                    self.favoriteSwitch.setOn(false, animated: false)
+                }
+            })
         } else {
-            ref.child((event?.getEventID())!).child("favoritedBy").child(email).setValue(true)
+            
+           ref.child("name").observeSingleEvent(of: .value, with: { (snapshot) in
+            let name = snapshot.value as? String ?? ""
+            if (name != "") {
+                ref.child((self.event?.getEventID())!).child("favoritedBy").child(email).setValue(true)
+            } else {
+                let dialogTitle = "Event No Longer Exists"
+                let dialogMessage = "This event no longer exists, and will not be added to \"MyEvents\".";
+                self.showErrorDialog(dialogTitle, dialogMessage)
+                self.favoriteSwitch.setOn(true, animated: false)
+            }
+           })
         }
+    }
+    
+    func showErrorDialog(_ dialogTitle: String, _ dialogMessage: String) {
+        if presentedViewController != nil {
+            return
+        }
+        
+        let alertPrompt = UIAlertController(title: dialogTitle, message: dialogMessage, preferredStyle: .actionSheet)
+        //let confirmAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action) -> Void in})
+        
+        //alertPrompt.addAction(confirmAction)
+        alertPrompt.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertPrompt, animated: true, completion: nil)
+    }
+    
+    //TODO: Launch a QR Scanner similar to the QRScannerController.swift class (Can we just use the same class?)
+    @objc func secureCheckIn() {
+        let QRController:QRScannerController = QRScannerController()
+        self.present(QRController, animated: true, completion: nil)
     }
     
     let line1 = UILabel()
@@ -320,6 +370,7 @@ class EventViewController: UIViewController, DisplayEvent {
         scrollView.addSubview(calendarButton)
         scrollView.addSubview(favoriteLabel)
         scrollView.addSubview(favoriteSwitch)
+        scrollView.addSubview(secureCheckButton)
         
         
         eventNameLabel.anchor(top: scrollView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
@@ -347,13 +398,15 @@ class EventViewController: UIViewController, DisplayEvent {
         line2.anchor(top: descriptionTitle.bottomAnchor, left: containerView.rightAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: (1/1000)*UIScreen.main.bounds.height, enableInsets: false)
         
     
-        calendarButton.anchor(top: favoriteSwitch.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
+        calendarButton.anchor(top: favoriteSwitch.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         calendarButton.center.x = scrollView.center.x
         calendarButton.addTarget(self, action: #selector(calendarAction), for: .touchUpInside)
         favoriteSwitch.anchor(top: webLinkText.bottomAnchor, left: favoriteLabel.rightAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         favoriteLabel.anchor(top: webLinkText.bottomAnchor, left: containerView.leftAnchor, bottom: nil, right: nil, paddingTop: 10, paddingLeft: 10, paddingBottom: 0, paddingRight: 10, width: 0, height: 0, enableInsets: false)
+        secureCheckButton.anchor(top: calendarButton.bottomAnchor, left: containerView.leftAnchor, bottom: scrollView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 20, paddingLeft: 10, paddingBottom: 10, paddingRight: 10, width: 0, height: 45, enableInsets: false)
         
         favoriteSwitch.addTarget(self, action: #selector(favoriteAction), for: .touchUpInside)
+        secureCheckButton.addTarget(self, action: #selector(secureCheckIn), for: .touchUpInside)
     }
     
     // Anchors a title label to the left of a description label and anchors them to the bottom of the previous description label
